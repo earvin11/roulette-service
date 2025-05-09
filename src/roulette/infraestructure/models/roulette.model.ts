@@ -11,16 +11,16 @@ export class RouletteModel extends Document {
     language: string;
     @Prop()
     status: boolean;
-    @Prop()
-    lastJackpot: number;
-    @Prop()
-    jackpotRounds: number;
-    @Prop()
-    currenJackpotRound: number;
-    @Prop()
-    jackpotWin?: any[] | undefined;
-    @Prop()
-    rollback: boolean;
+    // @Prop()
+    // lastJackpot: number;
+    // @Prop()
+    // jackpotRounds: number;
+    // @Prop()
+    // currenJackpotRound: number;
+    // @Prop()
+    // jackpotWin?: any[] | undefined;
+    // @Prop()
+    // rollback: boolean;
     @Prop()
     active: boolean;
     @Prop()

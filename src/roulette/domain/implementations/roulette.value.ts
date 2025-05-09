@@ -6,11 +6,11 @@ export class Roulette implements RouletteEntity {
     doubleZero: boolean;
     language: string;
     status: boolean;
-    lastJackpot: number;
-    jackpotRounds: number;
-    currenJackpotRound: number;
-    jackpotWin?: any[];
-    rollback: boolean;
+    // lastJackpot: number;
+    // jackpotRounds: number;
+    // currenJackpotRound: number;
+    // jackpotWin?: any[];
+    // rollback: boolean;
     active: boolean;
     manualDisable: boolean;
     jackpotRandom: boolean;
@@ -60,11 +60,11 @@ export class Roulette implements RouletteEntity {
         this.doubleZero = data.doubleZero
         this.language = data.language
         this.status = data.status
-        this.lastJackpot = data.lastJackpot
-        this.jackpotRounds = data.jackpotRounds
-        this.currenJackpotRound = data.currenJackpotRound
-        this.jackpotWin = data.jackpotWin
-        this.rollback = data.rollback
+        // this.lastJackpot = data.lastJackpot
+        // this.jackpotRounds = data.jackpotRounds
+        // this.currenJackpotRound = data.currenJackpotRound
+        // this.jackpotWin = data.jackpotWin
+        // this.rollback = data.rollback
         this.active = data.active
         this.manualDisable = data.manualDisable
         this.jackpotRandom = data.jackpotRandom

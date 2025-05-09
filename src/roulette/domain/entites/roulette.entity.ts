@@ -3,11 +3,11 @@ export interface RouletteEntity {
     doubleZero: boolean;
     language: string;
     status: boolean;
-    lastJackpot: number;
-    jackpotRounds: number;
-    currenJackpotRound: number;
-    jackpotWin?: any[];
-    rollback: boolean;
+    // lastJackpot: number;
+    // jackpotRounds: number;
+    // currenJackpotRound: number;
+    // jackpotWin?: any[];
+    // rollback: boolean;
     active: boolean;
     manualDisable: boolean;
     jackpotRandom: boolean;

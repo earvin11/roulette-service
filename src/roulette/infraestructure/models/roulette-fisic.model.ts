@@ -10,16 +10,16 @@ export class RouletteFisicModel extends Document {
     providerId: string;
     @Prop()
     crupier: string;
-    @Prop()
-    jackpot?: boolean | undefined;
+    @Prop({ default: false })
+    jackpot: boolean;
     @Prop()
     urlTransmision: string;
     @Prop()
     roundDuration: number;
-    @Prop()
-    minutesToDisable?: number | undefined;
-    @Prop()
-    doubleZero?: boolean | undefined;
+    @Prop({ default: 8 })
+    minutesToDisable: number;
+    @Prop({ default: false })
+    doubleZero: boolean;
     @Prop()
     timeOne: number;
     @Prop()

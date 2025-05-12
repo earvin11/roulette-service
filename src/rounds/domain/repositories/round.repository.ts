@@ -1,4 +1,4 @@
-import { RoundEntity } from "../entities/round.entity";
+import { RoundEntity } from '../entities/round.entity';
 
 export abstract class RoundRepository {
     abstract create(data: RoundEntity): Promise<RoundEntity>;

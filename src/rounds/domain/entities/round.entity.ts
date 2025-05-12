@@ -1,6 +1,6 @@
 
 export interface RoundEntity {
-    _id?: string;
+    // _id?: string;
     code: string;
     start_date: Date;
     end_date: Date;

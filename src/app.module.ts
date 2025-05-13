@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RoundModule } from './rounds/infraestructure/round.module';
+import { OperatorRouletteModule } from './operator-roulette/infraestructure/operator-roulette.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RoundModule } from './rounds/infraestructure/round.module';
         port: 6379,
       },
     }),
+    OperatorRouletteModule,
     RoundModule,
   ],
   controllers: [],

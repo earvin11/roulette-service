@@ -11,8 +11,9 @@ export class RoundMongoRepository implements RoundRepository {
         private readonly roundModel: Model<RoundModel>
     ) {}
 
-    create(data: RoundEntity): Promise<RoundEntity> {
-        throw new Error('Method not implemented.');
+    async create(data: RoundEntity): Promise<RoundEntity> {
+        const newRound = await this.roundModel.create(data);
+        return await newRound.save();
     }
     findAll(page: number, limit: number): Promise<RoundEntity[] | []> {
         throw new Error('Method not implemented.');

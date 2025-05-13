@@ -7,5 +7,6 @@ export abstract class OperatorRouletteRepository {
     abstract findOneBy(filter: Record<string, any>, populateFields?: string | string[]): Promise<OperatorRouletteEntity | null>;
     abstract findManyBy(filter: Record<string, any>, populateFields?: string | string[]): Promise<OperatorRouletteEntity [] | []>;
     abstract update(id: string, data: Partial<OperatorRouletteEntity>): Promise<OperatorRouletteEntity | null>;
+    abstract updateOne(uuid: string, data: Partial<OperatorRouletteEntity>): Promise<OperatorRouletteEntity | null>;
     abstract remove(id: string): Promise<OperatorRouletteEntity | null>;
 };

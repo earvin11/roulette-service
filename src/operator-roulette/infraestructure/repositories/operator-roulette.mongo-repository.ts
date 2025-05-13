@@ -58,6 +58,10 @@ export class OperatorRouletteMongoRepository implements OperatorRouletteReposito
         const resp = await this.operatorRoulette.findByIdAndUpdate(id, data);
         return resp;
     }
+    public updateOne = async(uuid: string, data: Partial<OperatorRouletteEntity>): Promise<OperatorRouletteEntity | null> => {
+        const resp = await this.operatorRoulette.findOneAndUpdate({ uuid }, data);
+        return resp;
+    }
     public remove = async(id: string): Promise<OperatorRouletteEntity | null> => {
         const resp = await this.operatorRoulette.findByIdAndDelete(id);
         return resp;

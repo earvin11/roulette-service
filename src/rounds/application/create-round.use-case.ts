@@ -21,11 +21,35 @@ export class CreateRoundUseCase {
     async run(data: ICreateRound) {
         const { ID_Ruleta } = data;
 
-        const roulette = await this.operatorRouletteUseCases.findOneBy({ providerId: ID_Ruleta });
+        const configRoulette = await this.operatorRouletteUseCases.findOneBy({ providerId: ID_Ruleta });
         //TODO: mejorar error de no coincidir con la ruleta
-        if(!roulette) return;
+        if(!configRoulette) return;
 
-        
+        const result = Number(data.Resultado);
+        const possibleResults = [-1, 99];
+
+        //TODO:
+        // Evaluar data erronea en los results
+        if (!possibleResults.includes(result)) {
+            if (this.verifyResult(result)) {
+
+            }
+        }
+
+        // let secondsToAdd = configRoulette.roundDuration;
+
+        if(!configRoulette.active) {
+            await this.operatorRouletteUseCases.updateOne(configRoulette.uuid!, {
+                active: true
+            });
+        }
+
+        //TODO:
+        if(configRoulette.isManualRoulette) {
+            //BUSCAR RONDA ACTUAL
+        }
+
+
     }
 
     private useIndentifierNumber = async () => {
@@ -37,5 +61,15 @@ export class CreateRoundUseCase {
             });
         const limitedUuid = numericUuid.slice(0, 10);
         return parseInt(limitedUuid, 10);
+    };
+
+    private verifyResult = (result: number) => {
+        if (result !== 99) {
+            if (result < 0 || result > 37) {
+                return true;
+            }
+        }
+
+        return false;
     };
 }

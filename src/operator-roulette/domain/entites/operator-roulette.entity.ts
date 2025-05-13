@@ -2,9 +2,13 @@ export interface OperatorRouletteEntity {
     operator: string;
     roulette: string;
     providerId: string;
+    roundDuration: number;
+    timeToReleaseJack: number;
+    isManualRoulette?: boolean;
     doubleZero?: boolean;
     jackpot?: boolean;
     order: number;
+    active?: boolean;
     currencies: string[];
     pleno?: number;
     semipleno?: number;

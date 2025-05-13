@@ -5,6 +5,8 @@ export class OperatorRoulette implements OperatorRouletteEntity {
     public operator: string;
     public roulette: string;
     public providerId: string;
+    public roundDuration: number;
+    public timeToReleaseJack: number;
     public jackpot?: boolean;
     public doubleZero?: boolean;
     public order: number;
@@ -20,6 +22,8 @@ export class OperatorRoulette implements OperatorRouletteEntity {
     public cubre?: number;
     public specialCalle?: number;
     public uuid: string;
+    public isManualRoulette?: boolean;
+    public active?: boolean;
     public layout?: boolean | undefined;
     public template?: string | undefined;
     public logo?: string | undefined;
@@ -46,5 +50,10 @@ export class OperatorRoulette implements OperatorRouletteEntity {
         this.layout = data.layout;
         this.template = data.template;
         this.logo = data.logo;
+        this.timeToReleaseJack = data.timeToReleaseJack;
+        this.roundDuration = data.roundDuration;
+        this.isManualRoulette = data.isManualRoulette;
+        this.active = data.active;
     }
+    
 }

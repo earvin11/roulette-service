@@ -13,6 +13,18 @@ export class OperatorRoulette extends Document implements OperatorRouletteEntity
     @Prop()
     providerId: string;
 
+    @Prop()
+    roundDuration: number;
+
+    @Prop()
+    timeToReleaseJack: number;
+    
+    @Prop({ default: true })
+    active: boolean;
+
+    @Prop({ default: false })
+    isManualRoulette: boolean;
+
     @Prop({ default: false })
     doubleZero: boolean;
 

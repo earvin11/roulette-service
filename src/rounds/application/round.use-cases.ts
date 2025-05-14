@@ -2,6 +2,9 @@ import { RoundEntity } from '../domain/entities/round.entity';
 import { Round } from '../domain/implementations/round.value';
 import { RoundRepository } from '../domain/repositories/round.repository';
 
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
 
 interface ICreateRound {
     rouletteId: string;
@@ -25,26 +28,27 @@ export class RoundUseCases {
             secondsToAdd,
         } = data;
 
-        // const date = moment().utc().format('DD-MM-YYYY');
-        // const time = moment().utc().format('HH-mm-ss');
+        const nowUtc = dayjs().utc();
+        const date = nowUtc.format('DD-MM-YYYY');
+        const time = nowUtc.format('HH-mm-ss');
 
         // TODO:
-        // const number = await this.verifyDate(rouletteId);
+        const number = await this.verifyDate(rouletteId);
 
         const startDate = new Date();
         const futureDate = new Date(startDate.getTime() + secondsToAdd * 1000);
-        // const newRound = new Round({
-        //     // code: `${rouletteName}-${date}-${time}-${number}`,
-        //     end_date: futureDate,
-        //     identifierNumber,
-        //     // number
-        //     open: true,
-        //    providerId,
-        //    roulette: rouletteId,
-        //    result: -1,
-        //    start_date: startDate 
-        // });
-        // return await this.roundRepository.create(newRound);
+        const newRound = new Round({
+            code: `${rouletteName}-${date}-${time}-${number}`,
+            end_date: futureDate,
+            identifierNumber,
+            number,
+            open: true,
+            providerId,
+            roulette: rouletteId,
+            result: -1,
+            start_date: startDate 
+        });
+        return await this.roundRepository.create(newRound);
     };
 
     public findAll = async(page = 1, limit = 10) => {

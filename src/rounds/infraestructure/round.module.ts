@@ -7,6 +7,7 @@ import { OperatorRouletteModule } from 'src/operator-roulette/infraestructure/op
 import { RoundController } from './controllers/round.controller';
 import { CreateRoundUseCase } from '../application/create-round.use-case';
 import { RoundUseCases } from '../application/round.use-cases';
+import { DateServiceModule } from 'src/date-service/infraestructure/date-service.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RoundUseCases } from '../application/round.use-cases';
       },
     ]),
     OperatorRouletteModule,
+    DateServiceModule
   ],
   controllers: [RoundController],
   providers: [

@@ -1,10 +1,7 @@
+import { DateServiceUseCases } from 'src/date-service/application/date-service.use-cases';
 import { RoundEntity } from '../domain/entities/round.entity';
 import { Round } from '../domain/implementations/round.value';
 import { RoundRepository } from '../domain/repositories/round.repository';
-
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
 
 interface ICreateRound {
     rouletteId: string;
@@ -16,7 +13,8 @@ interface ICreateRound {
 
 export class RoundUseCases {
     constructor(
-        private readonly roundRepository: RoundRepository
+        private readonly roundRepository: RoundRepository,
+        private readonly dateServiceUseCases: DateServiceUseCases,
     ) {}
 
     public create = async(data: ICreateRound) => {
@@ -28,11 +26,9 @@ export class RoundUseCases {
             secondsToAdd,
         } = data;
 
-        const nowUtc = dayjs().utc();
-        const date = nowUtc.format('DD-MM-YYYY');
-        const time = nowUtc.format('HH-mm-ss');
+        const date = this.dateServiceUseCases.getCurrentDate('DD-MM-YYYY');
+        const time = this.dateServiceUseCases.getCurrentTime('HH-mm-ss');
 
-        // TODO:
         const number = await this.verifyDate(rouletteId);
 
         const startDate = new Date();

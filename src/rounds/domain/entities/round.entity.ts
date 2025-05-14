@@ -11,6 +11,7 @@ export interface RoundEntity {
     open: boolean;
     number: number;
     identifierNumber: number;
-    crupier: string;
+    uuid?: string;
+    // crupier: string;
 }
 

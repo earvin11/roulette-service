@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OperatorRouletteUseCases } from 'src/operator-roulette/application/operator-roulette.use-cases';
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
+import { RoundUseCases } from './round.use-cases';
 
  interface ICreateRound {
     ID_Ruleta: string;
@@ -17,6 +18,7 @@ import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 export class CreateRoundUseCase {
     constructor(
         private readonly operatorRouletteUseCases: OperatorRouletteUseCases,
+        private readonly roundUseCases: RoundUseCases,
     ) {}
     async run(data: ICreateRound) {
         const { ID_Ruleta } = data;
@@ -47,12 +49,30 @@ export class CreateRoundUseCase {
         //TODO:
         if(configRoulette.isManualRoulette) {
             //BUSCAR RONDA ACTUAL
+            const roundExists = await this.roundUseCases.findOneBy({
+                roulette: configRoulette.roulette,
+                result: { $in: possibleResults },
+                providerId: { $ne: '999' }, // para no tomar en cuenta rondas cerradas
+            });
+            if (roundExists)
+                return {
+                    error: true,
+                    msg: 'Round by roulette opened',
+                    ID_Ronda: roundExists.providerId,
+                };
         }
 
+        const round = await this.roundUseCases.create({
+            identifierNumber: this.useIndentifierNumber(),
+            providerId: ID_Ruleta,
+            rouletteId: configRoulette.roulette,
+            rouletteName: configRoulette.rouletteName,
+            secondsToAdd: configRoulette.roundDuration
+        });
 
     }
 
-    private useIndentifierNumber = async () => {
+    private useIndentifierNumber = () => {
         const uuid = generateUuid();
         const numericUuid = uuid
             .replace(/-/g, "")

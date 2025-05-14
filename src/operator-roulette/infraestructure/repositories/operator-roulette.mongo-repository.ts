@@ -11,6 +11,7 @@ export class OperatorRouletteMongoRepository implements OperatorRouletteReposito
         @InjectModel(OperatorRoulette.name)
         private readonly operatorRoulette: Model<OperatorRoulette>
     ) {}
+    
     public create = async(data: OperatorRouletteEntity): Promise<OperatorRouletteEntity> => {
         const newData = await this.operatorRoulette.create(data);
         return await newData.save();
@@ -27,6 +28,15 @@ export class OperatorRouletteMongoRepository implements OperatorRouletteReposito
     }
     public findById = async(id: string, populateFields?: string | string[]): Promise<OperatorRouletteEntity | null> => {
         let query = this.operatorRoulette.findById(id);
+        if (populateFields) {
+            query = query.populate(populateFields);
+        }
+    
+        const data = await query.exec();
+        return data;
+    }
+    public findByUuid = async(uuid: string, populateFields?: string | string[]): Promise<OperatorRouletteEntity | null> => {
+        let query = this.operatorRoulette.findOne({ uuid });
         if (populateFields) {
             query = query.populate(populateFields);
         }
@@ -58,7 +68,7 @@ export class OperatorRouletteMongoRepository implements OperatorRouletteReposito
         const resp = await this.operatorRoulette.findByIdAndUpdate(id, data);
         return resp;
     }
-    public updateOne = async(uuid: string, data: Partial<OperatorRouletteEntity>): Promise<OperatorRouletteEntity | null> => {
+    public updateByUuid = async(uuid: string, data: Partial<OperatorRouletteEntity>): Promise<OperatorRouletteEntity | null> => {
         const resp = await this.operatorRoulette.findOneAndUpdate({ uuid }, data);
         return resp;
     }

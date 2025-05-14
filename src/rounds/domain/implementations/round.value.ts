@@ -1,3 +1,4 @@
+import { generateUuid } from "src/shared/helpers/generate-uuid.helper";
 import { RoundEntity } from "../entities/round.entity";
 
 export class Round implements RoundEntity {
@@ -11,7 +12,7 @@ export class Round implements RoundEntity {
     open: boolean;
     number: number;
     identifierNumber: number;
-    crupier: string;
+    uuid: string;
 
     constructor(data: RoundEntity) {
         this.code = data.code;
@@ -24,6 +25,7 @@ export class Round implements RoundEntity {
         this.open = true;
         this.number = data.number;
         this.identifierNumber = data.identifierNumber;
-        this.crupier = data.crupier;
+        this.uuid = generateUuid();
+        // this.crupier = data.crupier;
     }
 }

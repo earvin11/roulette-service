@@ -11,6 +11,9 @@ export class OperatorRoulette extends Document implements OperatorRouletteEntity
     roulette: string;
 
     @Prop()
+    rouletteName: string;
+
+    @Prop()
     providerId: string;
 
     @Prop()
@@ -67,7 +70,7 @@ export class OperatorRoulette extends Document implements OperatorRouletteEntity
     @Prop({ default: 7 })
     specialCalle: number;
 
-    @Prop({ unique: true })
+    @Prop({ unique: true, index: true })
     uuid: string;
 
     @Prop()

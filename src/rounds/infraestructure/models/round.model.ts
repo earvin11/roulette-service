@@ -22,8 +22,8 @@ export class RoundModel extends Document implements RoundEntity {
     number: number;
     @Prop()
     identifierNumber: number;
-    @Prop()
-    crupier: string;
+    @Prop({ unique: true, index: true })
+    uuid: string;
 }
 
 export const RoundSchema = SchemaFactory.createForClass(RoundModel);

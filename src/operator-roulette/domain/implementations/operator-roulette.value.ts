@@ -4,6 +4,7 @@ import { OperatorRouletteEntity } from '../entites/operator-roulette.entity';
 export class OperatorRoulette implements OperatorRouletteEntity {
     public operator: string;
     public roulette: string;
+    public rouletteName: string;
     public providerId: string;
     public roundDuration: number;
     public timeToReleaseJack: number;
@@ -31,6 +32,7 @@ export class OperatorRoulette implements OperatorRouletteEntity {
     constructor(data: OperatorRouletteEntity) {
         this.operator = data.operator;
         this.roulette = data.roulette;
+        this.rouletteName = data.rouletteName;
         this.providerId = data.providerId;
         this.doubleZero = data.doubleZero;
         this.jackpot = data.jackpot;

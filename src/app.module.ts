@@ -5,8 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RoundModule } from './rounds/infraestructure/round.module';
 import { OperatorRouletteModule } from './operator-roulette/infraestructure/operator-roulette.module';
 import { DateServiceModule } from './date-service/infraestructure/date-service.module';
-import { EventsModule } from './events/infraestructure/events.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     DateServiceModule,
     OperatorRouletteModule,
     RoundModule,
+    WsServerModule,
   ],
   controllers: [],
   providers: [],

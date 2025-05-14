@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { RoundModule } from './rounds/infraestructure/round.module';
 import { OperatorRouletteModule } from './operator-roulette/infraestructure/operator-roulette.module';
 import { DateServiceModule } from './date-service/infraestructure/date-service.module';
+import { EventsModule } from './events/infraestructure/events.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
@@ -19,6 +21,7 @@ import { DateServiceModule } from './date-service/infraestructure/date-service.m
         port: 6379,
       },
     }),
+    EventEmitterModule.forRoot(),
     DateServiceModule,
     OperatorRouletteModule,
     RoundModule,

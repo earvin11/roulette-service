@@ -8,6 +8,8 @@ import { RoundController } from './controllers/round.controller';
 import { CreateRoundUseCase } from '../application/create-round.use-case';
 import { RoundUseCases } from '../application/round.use-cases';
 import { DateServiceModule } from 'src/date-service/infraestructure/date-service.module';
+import { EndRoundUseCases } from '../application/end-round.use-case';
+import { EventsModule } from 'src/events/infraestructure/events.module';
 
 @Module({
   imports: [
@@ -18,13 +20,15 @@ import { DateServiceModule } from 'src/date-service/infraestructure/date-service
       },
     ]),
     OperatorRouletteModule,
-    DateServiceModule
+    DateServiceModule,
+    EventsModule
   ],
   controllers: [RoundController],
   providers: [
     RoundMongoRepository,
     RoundUseCases,
     CreateRoundUseCase,
+    EndRoundUseCases,
     {
       provide: RoundRepository,
       useExisting: RoundMongoRepository,

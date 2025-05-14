@@ -29,7 +29,11 @@ export class EndRoundUseCases {
         }
 
         const roulette = await this.operatorRouletteUseCases.findOneBy({ providerId: data.ID_Ruleta });
-        if(!roulette) return;
+        if(!roulette) return {
+            error: true,
+            message: 'Error roulette not found',
+            providerId: data.ID_Ruleta
+        };
 
         const result = +data.Resultado
 
@@ -46,5 +50,6 @@ export class EndRoundUseCases {
             round: round.uuid
         });
 
+        return;
     }
 }

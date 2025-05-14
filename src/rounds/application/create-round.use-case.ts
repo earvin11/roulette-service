@@ -15,7 +15,6 @@ import { EventsEnum } from 'src/shared/enums/events.enum';
     Fecha: string;
 }
 
-
 @Injectable()
 export class CreateRoundUseCase {
     constructor(
@@ -81,8 +80,9 @@ export class CreateRoundUseCase {
                 identifierNumber: round.identifierNumber,
                 round: round.uuid,
             }
-        })
+        });
 
+        return;
     }
 
     private useIndentifierNumber = () => {

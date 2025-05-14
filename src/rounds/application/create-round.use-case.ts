@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { OperatorRouletteUseCases } from 'src/operator-roulette/application/operator-roulette.use-cases';
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 import { RoundUseCases } from './round.use-cases';
+import { EventPublisher } from 'src/events/application/event-publisher';
+import { EventsEnum } from 'src/shared/enums/events.enum';
 
  interface ICreateRound {
     ID_Ruleta: string;
@@ -19,6 +21,7 @@ export class CreateRoundUseCase {
     constructor(
         private readonly operatorRouletteUseCases: OperatorRouletteUseCases,
         private readonly roundUseCases: RoundUseCases,
+        private readonly eventPublisher: EventPublisher
     ) {}
     async run(data: ICreateRound) {
         const { ID_Ruleta } = data;
@@ -67,6 +70,18 @@ export class CreateRoundUseCase {
             rouletteName: configRoulette.rouletteName,
             secondsToAdd: configRoulette.roundDuration
         });
+
+        // Publicar ronda para emitir
+        this.eventPublisher.emit(EventsEnum.ROUND_START, {
+            msg: 'Round opened',
+            round: {
+                start_date: round.start_date,
+                end_date: round.end_date,
+                ID_Ronda: data.ID_Ronda,
+                identifierNumber: round.identifierNumber,
+                round: round.uuid,
+            }
+        })
 
     }
 

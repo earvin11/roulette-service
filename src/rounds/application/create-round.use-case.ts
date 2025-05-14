@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { OperatorRouletteUseCases } from 'src/operator-roulette/application/operator-roulette.use-cases';
+import { RouletteUseCases } from 'src/operator-roulette/application/roulette.use-cases';
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 import { RoundUseCases } from './round.use-cases';
 import { EventPublisher } from 'src/events/application/event-publisher';
@@ -18,14 +18,14 @@ import { EventsEnum } from 'src/shared/enums/events.enum';
 @Injectable()
 export class CreateRoundUseCase {
     constructor(
-        private readonly operatorRouletteUseCases: OperatorRouletteUseCases,
+        private readonly rouletteUseCases: RouletteUseCases,
         private readonly roundUseCases: RoundUseCases,
         private readonly eventPublisher: EventPublisher
     ) {}
     async run(data: ICreateRound) {
         const { ID_Ruleta } = data;
 
-        const configRoulette = await this.operatorRouletteUseCases.findOneBy({ providerId: ID_Ruleta });
+        const configRoulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
         //TODO: mejorar error de no coincidir con la ruleta
         if(!configRoulette) return;
 
@@ -41,7 +41,7 @@ export class CreateRoundUseCase {
         }
 
         if(!configRoulette.active) {
-            await this.operatorRouletteUseCases.updateOne(configRoulette.uuid!, {
+            await this.rouletteUseCases.updateOne(configRoulette.uuid!, {
                 active: true
             });
         }

@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { OperatorRouletteEntity } from 'src/operator-roulette/domain/entites/operator-roulette.entity';
+import { RouletteEntity } from 'src/operator-roulette/domain/entites/roulette.entity';
 
 @Schema()
-export class OperatorRoulette extends Document implements OperatorRouletteEntity {
+export class Roulette extends Document implements RouletteEntity {
     @Prop()
     operator: string;
 
@@ -83,4 +83,4 @@ export class OperatorRoulette extends Document implements OperatorRouletteEntity
     logo?: string;
 }
 
-export const OperatorRouletteSchema = SchemaFactory.createForClass(OperatorRoulette);
+export const RouletteSchema = SchemaFactory.createForClass(Roulette);

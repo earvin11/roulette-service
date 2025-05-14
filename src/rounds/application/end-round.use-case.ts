@@ -1,4 +1,4 @@
-import { OperatorRouletteUseCases } from "src/operator-roulette/application/operator-roulette.use-cases";
+import { RouletteUseCases } from "src/operator-roulette/application/roulette.use-cases";
 import { RoundUseCases } from "./round.use-cases";
 import { EventPublisher } from "src/events/application/event-publisher";
 import { EventsEnum } from "src/shared/enums/events.enum";
@@ -16,7 +16,7 @@ export interface IEndRound {
 export class EndRoundUseCases {
     constructor(
         private readonly roundUseCases: RoundUseCases,
-        private readonly operatorRouletteUseCases: OperatorRouletteUseCases,
+        private readonly rouletteUseCases: RouletteUseCases,
         private readonly eventPublisher: EventPublisher,
     ) {}
     async run(data: IEndRound) {
@@ -28,7 +28,7 @@ export class EndRoundUseCases {
             ID_Ronda: data.ID_Ronda,
         }
 
-        const roulette = await this.operatorRouletteUseCases.findOneBy({ providerId: data.ID_Ruleta });
+        const roulette = await this.rouletteUseCases.findOneBy({ providerId: data.ID_Ruleta });
         if(!roulette) return {
             error: true,
             message: 'Error roulette not found',

@@ -38,8 +38,6 @@ export class CreateRoundUseCase {
             }
         }
 
-        // let secondsToAdd = configRoulette.roundDuration;
-
         if(!configRoulette.active) {
             await this.operatorRouletteUseCases.updateOne(configRoulette.uuid!, {
                 active: true

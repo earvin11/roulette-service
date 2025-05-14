@@ -38,7 +38,7 @@ export class OperatorRouletteUseCases {
     };
 
     public updateOne = async(uuid: string, dataToUpdate: Partial<OperatorRouletteEntity>) => {
-        const data = await this.operatorRouletteRepository.updateOne(uuid, dataToUpdate);
+        const data = await this.operatorRouletteRepository.updateByUuid(uuid, dataToUpdate);
         return data;
     }
 

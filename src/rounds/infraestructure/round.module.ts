@@ -4,6 +4,9 @@ import { RoundModel, RoundSchema } from './models/round.model';
 import { RoundMongoRepository } from './repositories/round.mongo-repository';
 import { RoundRepository } from '../domain/repositories/round.repository';
 import { OperatorRouletteModule } from 'src/operator-roulette/infraestructure/operator-roulette.module';
+import { RoundController } from './controllers/round.controller';
+import { CreateRoundUseCase } from '../application/create-round.use-case';
+import { RoundUseCases } from '../application/round.use-cases';
 
 @Module({
   imports: [
@@ -15,9 +18,11 @@ import { OperatorRouletteModule } from 'src/operator-roulette/infraestructure/op
     ]),
     OperatorRouletteModule,
   ],
-  controllers: [],
+  controllers: [RoundController],
   providers: [
     RoundMongoRepository,
+    RoundUseCases,
+    CreateRoundUseCase,
     {
       provide: RoundRepository,
       useExisting: RoundMongoRepository,

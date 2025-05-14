@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
- export class CreateRoundDto {
+ export class CreateOrEndRoundDto {
     @IsString()
     ID_Ruleta: string;
 

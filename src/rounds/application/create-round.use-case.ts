@@ -4,6 +4,7 @@ import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 import { RoundUseCases } from './round.use-cases';
 import { EventPublisher } from 'src/events/application/event-publisher';
 import { EventsEnum } from 'src/shared/enums/events.enum';
+import { sleep } from 'src/shared/helpers/sleep.helper';
 
  interface ICreateRound {
     ID_Ruleta: string;
@@ -23,7 +24,7 @@ export class CreateRoundUseCase {
         private readonly eventPublisher: EventPublisher
     ) {}
     async run(data: ICreateRound) {
-        const { ID_Ruleta } = data;
+        const { ID_Ruleta, ID_Ronda } = data;
 
         const roulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
         //TODO: mejorar error de no coincidir con la ruleta
@@ -64,7 +65,7 @@ export class CreateRoundUseCase {
 
         const round = await this.roundUseCases.create({
             identifierNumber: this.useIndentifierNumber(),
-            providerId: ID_Ruleta,
+            providerId: ID_Ronda,
             rouletteId: roulette.uuid!,
             rouletteName: roulette.name,
             secondsToAdd: roulette.roundDuration
@@ -80,6 +81,12 @@ export class CreateRoundUseCase {
                 identifierNumber: round.identifierNumber,
                 round: round.uuid,
             }
+        });
+
+        // await sleep(roulette.roundDuration);
+
+        await this.roundUseCases.updateByUuid(round.uuid!, {
+            open: false
         });
 
         return;

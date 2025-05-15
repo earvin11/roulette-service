@@ -33,8 +33,8 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @OnEvent(EventsEnum.ROUND_END)
-  endRound() {
-    this.server.emit(SocketEventsEnum.ROUND_END);
+  endRound(payload: any) {
+    this.server.emit(SocketEventsEnum.ROUND_END, JSON.stringify(payload));
     return;
   }
 

@@ -1,4 +1,4 @@
-import { RouletteUseCases } from "src/operator-roulette/application/roulette.use-cases";
+import { RouletteUseCases } from "src/roulette/application/roulette.use-cases";
 import { RoundUseCases } from "./round.use-cases";
 import { EventPublisher } from "src/events/application/event-publisher";
 import { EventsEnum } from "src/shared/enums/events.enum";

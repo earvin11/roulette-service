@@ -3,10 +3,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { RoundModule } from './rounds/infraestructure/round.module';
-import { OperatorRouletteModule } from './operator-roulette/infraestructure/operator-roulette.module';
+import { RouletteModule } from './roulette/infraestructure/roulette.module';
 import { DateServiceModule } from './date-service/infraestructure/date-service.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
+import { OperatorModule } from './operators/infraestructure/operator.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
     }),
     EventEmitterModule.forRoot(),
     DateServiceModule,
-    OperatorRouletteModule,
+    RouletteModule,
+    OperatorModule,
     RoundModule,
     WsServerModule,
   ],

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { OperatorConfigEntity } from 'src/operator-roulette/domain/entites/operator-config.entity';
+import { OperatorConfigEntity } from 'src/operators/domain/entites/operator-config.entity';
 
 @Schema()
 export class OperatorConfig extends Document implements OperatorConfigEntity {

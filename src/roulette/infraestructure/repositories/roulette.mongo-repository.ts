@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Roulette } from '../models/roulette.model';
-import { RouletteRepository } from 'src/operator-roulette/domain/repositories/roulette.repository';
-import { RouletteEntity } from 'src/operator-roulette/domain/entites/roulette.entity';
+import { RouletteRepository } from 'src/roulette/domain/repositories/roulette.repository';
+import { RouletteEntity } from 'src/roulette/domain/entites/roulette.entity';
 
 @Injectable()
 export class RouletteMongoRepository implements RouletteRepository {

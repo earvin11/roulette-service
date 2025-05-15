@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import dayjs from 'dayjs';
-// import utc from 'dayjs/plugin/utc';
+import utc from 'dayjs/plugin/utc';
 import { DateServicePort } from '../domain/date-service.port';
 
 // dayjs.extend(utc); // Extiende Day.js con el plugin UTC

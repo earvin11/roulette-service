@@ -25,4 +25,4 @@ import { RouletteUseCases } from '../application/roulette.use-cases';
   ],
   exports: [RouletteUseCases],
 })
-export class OperatorRouletteModule {}
+export class RouletteModule {}

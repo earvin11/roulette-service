@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RouletteUseCases } from 'src/operator-roulette/application/roulette.use-cases';
+import { RouletteUseCases } from 'src/roulette/application/roulette.use-cases';
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 import { RoundUseCases } from './round.use-cases';
 import { EventPublisher } from 'src/events/application/event-publisher';

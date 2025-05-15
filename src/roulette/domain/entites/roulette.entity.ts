@@ -1,6 +1,5 @@
 export interface RouletteEntity {
-    roulette: string;
-    rouletteName: string;
+    name: string;
     providerId: string;
     roundDuration: number;
     timeToReleaseJack: number;

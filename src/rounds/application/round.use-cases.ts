@@ -2,6 +2,7 @@ import { DateServiceUseCases } from 'src/date-service/application/date-service.u
 import { RoundEntity } from '../domain/entities/round.entity';
 import { Round } from '../domain/implementations/round.value';
 import { RoundRepository } from '../domain/repositories/round.repository';
+import { Injectable } from '@nestjs/common';
 
 interface ICreateRound {
     rouletteId: string;
@@ -11,6 +12,7 @@ interface ICreateRound {
     secondsToAdd: number;
 }
 
+@Injectable()
 export class RoundUseCases {
     constructor(
         private readonly roundRepository: RoundRepository,

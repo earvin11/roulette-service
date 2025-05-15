@@ -1,23 +1,21 @@
-import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Roulette } from '../models/roulette.model';
 import { RouletteRepository } from 'src/roulette/domain/repositories/roulette.repository';
 import { RouletteEntity } from 'src/roulette/domain/entites/roulette.entity';
 
-@Injectable()
 export class RouletteMongoRepository implements RouletteRepository {
     constructor(
         @InjectModel(Roulette.name)
-        private readonly operatorRoulette: Model<Roulette>
+        private readonly roulette: Model<Roulette>
     ) {}
     
     public create = async(data: RouletteEntity): Promise<RouletteEntity> => {
-        const newData = await this.operatorRoulette.create(data);
+        const newData = await this.roulette.create(data);
         return await newData.save();
     }
     public findAll = async(page: number, limit: number, populateFields?: string | string[]): Promise<RouletteEntity[] | []> => {
-        let query = this.operatorRoulette.find().skip(page).limit(limit);
+        let query = this.roulette.find().skip(page).limit(limit);
 
         if (populateFields) {
             query = query.populate(populateFields);
@@ -27,7 +25,7 @@ export class RouletteMongoRepository implements RouletteRepository {
         return data;
     }
     public findById = async(id: string, populateFields?: string | string[]): Promise<RouletteEntity | null> => {
-        let query = this.operatorRoulette.findById(id);
+        let query = this.roulette.findById(id);
         if (populateFields) {
             query = query.populate(populateFields);
         }
@@ -36,7 +34,7 @@ export class RouletteMongoRepository implements RouletteRepository {
         return data;
     }
     public findByUuid = async(uuid: string, populateFields?: string | string[]): Promise<RouletteEntity | null> => {
-        let query = this.operatorRoulette.findOne({ uuid });
+        let query = this.roulette.findOne({ uuid });
         if (populateFields) {
             query = query.populate(populateFields);
         }
@@ -45,7 +43,7 @@ export class RouletteMongoRepository implements RouletteRepository {
         return data;
     }
     public findOneBy = async(filter: Record<string, any>, populateFields?: string | string[]): Promise<RouletteEntity | null> => {
-        let query = this.operatorRoulette.findOne(filter);
+        let query = this.roulette.findOne(filter);
                        
         // Si hay campos para popular
         if (populateFields) {
@@ -56,7 +54,7 @@ export class RouletteMongoRepository implements RouletteRepository {
         return data;
     }
     public findManyBy = async(filter: Record<string, any>, populateFields?: string | string[]): Promise<RouletteEntity[] | []> => {
-        let query = this.operatorRoulette.find(filter);
+        let query = this.roulette.find(filter);
         if (populateFields) {
             query = query.populate(populateFields);
         }
@@ -65,15 +63,15 @@ export class RouletteMongoRepository implements RouletteRepository {
         return data;
     }
     public update = async(id: string, data: Partial<RouletteEntity>): Promise<RouletteEntity | null> => {
-        const resp = await this.operatorRoulette.findByIdAndUpdate(id, data);
+        const resp = await this.roulette.findByIdAndUpdate(id, data);
         return resp;
     }
     public updateByUuid = async(uuid: string, data: Partial<RouletteEntity>): Promise<RouletteEntity | null> => {
-        const resp = await this.operatorRoulette.findOneAndUpdate({ uuid }, data);
+        const resp = await this.roulette.findOneAndUpdate({ uuid }, data);
         return resp;
     }
     public remove = async(id: string): Promise<RouletteEntity | null> => {
-        const resp = await this.operatorRoulette.findByIdAndDelete(id);
+        const resp = await this.roulette.findByIdAndDelete(id);
         return resp;
     }
 }

@@ -13,8 +13,8 @@ import { OperatorModule } from './operators/infraestructure/operator.module';
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot('mongodb://127.0.0.1:27017', {
-      // dbName: 'rouletteServiceDb',
-      dbName: 'dbRuletas',
+      dbName: 'rouletteServiceDb',
+      // dbName: 'dbRuletas',
     }),
      BullModule.forRoot({
       connection: {

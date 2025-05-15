@@ -1,5 +1,7 @@
+import { Injectable } from '@nestjs/common';
 import { DateServicePort } from '../domain/date-service.port';
 
+@Injectable()
 export class DateServiceUseCases {
     constructor(
         private readonly dateServicePort: DateServicePort

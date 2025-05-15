@@ -2,6 +2,7 @@ import { RouletteUseCases } from "src/roulette/application/roulette.use-cases";
 import { RoundUseCases } from "./round.use-cases";
 import { EventPublisher } from "src/events/application/event-publisher";
 import { EventsEnum } from "src/shared/enums/events.enum";
+import { Injectable } from "@nestjs/common";
 
 export interface IEndRound {
     ID_Ruleta: string;
@@ -13,6 +14,7 @@ export interface IEndRound {
     Fecha: string;
 }
 
+@Injectable()
 export class EndRoundUseCases {
     constructor(
         private readonly roundUseCases: RoundUseCases,

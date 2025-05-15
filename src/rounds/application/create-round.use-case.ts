@@ -25,9 +25,9 @@ export class CreateRoundUseCase {
     async run(data: ICreateRound) {
         const { ID_Ruleta } = data;
 
-        const configRoulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
+        const roulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
         //TODO: mejorar error de no coincidir con la ruleta
-        if(!configRoulette) return;
+        if(!roulette) return;
 
         const result = Number(data.Resultado);
         const possibleResults = [-1, 99];
@@ -40,17 +40,17 @@ export class CreateRoundUseCase {
             }
         }
 
-        if(!configRoulette.active) {
-            await this.rouletteUseCases.updateOne(configRoulette.uuid!, {
+        if(!roulette.active) {
+            await this.rouletteUseCases.updateOne(roulette.uuid!, {
                 active: true
             });
         }
 
         //TODO:
-        if(configRoulette.isManualRoulette) {
+        if(roulette.isManualRoulette) {
             //BUSCAR RONDA ACTUAL
             const roundExists = await this.roundUseCases.findOneBy({
-                roulette: configRoulette.roulette,
+                roulette: roulette.uuid,
                 result: { $in: possibleResults },
                 providerId: { $ne: '999' }, // para no tomar en cuenta rondas cerradas
             });
@@ -65,9 +65,9 @@ export class CreateRoundUseCase {
         const round = await this.roundUseCases.create({
             identifierNumber: this.useIndentifierNumber(),
             providerId: ID_Ruleta,
-            rouletteId: configRoulette.roulette,
-            rouletteName: configRoulette.rouletteName,
-            secondsToAdd: configRoulette.roundDuration
+            rouletteId: roulette.uuid!,
+            rouletteName: roulette.name,
+            secondsToAdd: roulette.roundDuration
         });
 
         // Publicar ronda para emitir

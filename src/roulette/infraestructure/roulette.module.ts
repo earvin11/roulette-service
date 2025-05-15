@@ -4,6 +4,7 @@ import { Roulette, RouletteSchema } from './models/roulette.model';
 import { RouletteMongoRepository } from './repositories/roulette.mongo-repository';
 import { RouletteRepository } from '../domain/repositories/roulette.repository';
 import { RouletteUseCases } from '../application/roulette.use-cases';
+import { RouletteController } from './controllers/roulette.controller';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { RouletteUseCases } from '../application/roulette.use-cases';
       },
     ]),
   ],
-  controllers: [],
+  controllers: [RouletteController],
   providers: [
     RouletteMongoRepository,
     RouletteUseCases,

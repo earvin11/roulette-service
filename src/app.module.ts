@@ -8,24 +8,26 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
 import { OperatorModule } from './operators/infraestructure/operator.module';
 import { envs } from './config/envs';
-// import { QueueName } from './shared/enums/queues-names.enum';
+import { QueueName } from './shared/enums/queues-names.enum';
 
 @Module({
   imports: [
     MongooseModule.forRoot(envs.dbUri, {
       dbName: envs.dbName,
     }),
-    // BullModule.forRoot({
-    //   connection: {
-    //     host: envs.redisUri,
-    //     port: envs.redisPort,
-    //   },
-    // }),
-    // BullModule.registerQueue(
-    //   { name: QueueName.ROUND_START },
-    //   { name: QueueName.ROUND_UPDATE },
-    //   { name: QueueName.ROUND_END }
-    // ),
+    BullModule.forRoot({
+      // options: {
+      //   connection: {
+      //     host: envs.redisUri,
+      //     port: envs.redisPort,
+      //   },
+      // }
+    }),
+    BullModule.registerQueue(
+      { name: QueueName.ROUND_START, },
+      { name: QueueName.ROUND_UPDATE },
+      { name: QueueName.ROUND_END }
+    ),
     EventEmitterModule.forRoot(),
     DateServiceModule,
     RouletteModule,

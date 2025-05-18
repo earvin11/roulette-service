@@ -10,6 +10,8 @@ import { RoundUseCases } from '../application/round.use-cases';
 import { DateServiceModule } from 'src/date-service/infraestructure/date-service.module';
 import { EndRoundUseCases } from '../application/end-round.use-case';
 import { EventsModule } from 'src/events/infraestructure/events.module';
+import { RoundQueueService } from './queues/round-queue.service';
+import { RoundProcessor } from './queues/round.processor';
 
 @Module({
   imports: [
@@ -29,11 +31,13 @@ import { EventsModule } from 'src/events/infraestructure/events.module';
     RoundUseCases,
     CreateRoundUseCase,
     EndRoundUseCases,
+    RoundQueueService,
+    RoundProcessor,
     {
       provide: RoundRepository,
       useExisting: RoundMongoRepository,
     },
   ],
-  exports: [],
+  exports: [RoundQueueService],
 })
 export class RoundModule {}

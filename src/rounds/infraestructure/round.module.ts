@@ -11,7 +11,10 @@ import { DateServiceModule } from 'src/date-service/infraestructure/date-service
 import { EndRoundUseCases } from '../application/end-round.use-case';
 import { EventsModule } from 'src/events/infraestructure/events.module';
 import { RoundQueueService } from './queues/round-queue.service';
-import { RoundProcessor } from './queues/round.processor';
+import { RoundEndProcessor, RoundStartProcessor } from './queues/processors';
+import { BullModule } from '@nestjs/bullmq';
+import { QueueName } from 'src/shared/enums/queues-names.enum';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -21,6 +24,11 @@ import { RoundProcessor } from './queues/round.processor';
         schema: RoundSchema,
       },
     ]),
+    BullModule.registerQueue(
+      { name: QueueName.ROUND_START },
+      { name: QueueName.ROUND_UPDATE },
+      { name: QueueName.ROUND_END, processors: [join(__dirname, './queues/processors/round-end.processor.js')] }
+    ),
     RouletteModule,
     DateServiceModule,
     EventsModule
@@ -31,8 +39,9 @@ import { RoundProcessor } from './queues/round.processor';
     RoundUseCases,
     CreateRoundUseCase,
     EndRoundUseCases,
+    RoundStartProcessor,
+    RoundEndProcessor,
     RoundQueueService,
-    RoundProcessor,
     {
       provide: RoundRepository,
       useExisting: RoundMongoRepository,

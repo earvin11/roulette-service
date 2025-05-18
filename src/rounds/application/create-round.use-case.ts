@@ -83,7 +83,11 @@ export class CreateRoundUseCase {
             }
         });
 
-        // await sleep(roulette.roundDuration);
+        console.log('aqui ronda abierta')
+
+        await sleep(roulette.roundDuration);
+
+        console.log('aqui ronda cerrada')
 
         await this.roundUseCases.updateByUuid(round.uuid!, {
             open: false

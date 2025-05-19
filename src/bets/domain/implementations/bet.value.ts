@@ -8,7 +8,6 @@ export class Bet implements BetEntity {
     public type: string;
     public amount: number;
     public value: string | number
-    public bet: Record<string, any>;
     public isWinner: boolean;
     public amountPayout: number;
     public uuid: string;
@@ -20,7 +19,6 @@ export class Bet implements BetEntity {
         this.type = data.type;
         this.amount = data.amount;
         this.value = data.value;
-        this.bet = data.bet;
         this.isWinner = false;
         this.amountPayout = 0;
         this.uuid = generateUuid();

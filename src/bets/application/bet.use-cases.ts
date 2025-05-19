@@ -44,7 +44,7 @@ export class BetUseCases {
         // Mapeo de propiedades y tipos
         const betMappings = [
             { items: calleNumbers, type: 'calle', key: 'number' },
-            { items: chanceSimple, type: 'chance-simple', key: 'type' },
+            { items: chanceSimple, type: 'chance_simple', key: 'type' },
             { items: color, type: 'color', key: 'type' },
             { items: columns, type: 'column', key: 'type' },
             { items: cuadroNumbers, type: 'cuadro', key: 'number' },
@@ -54,7 +54,7 @@ export class BetUseCases {
             { items: lineaNumbers, type: 'linea', key: 'number' },
             { items: plenoNumbers, type: 'pleno', key: 'number' },
             { items: semiPlenoNumbers, type: 'semi-pleno', key: 'number' },
-            { items: specialCalle, type: 'special-calle', key: 'type' }
+            { items: specialCalle, type: 'special_calle', key: 'type' }
         ];
 
         // Generación dinámica de apuestas
@@ -68,7 +68,6 @@ export class BetUseCases {
                 bets.push({
                     amount,
                     value,
-                    bet: { amount, [key]: value },
                     gameUuid: data.roulette,
                     playerUuid: data.player,
                     roundUuid: data.round,

@@ -20,9 +20,6 @@ export class BetModel extends Document implements BetEntity {
     @Prop()
     value: string;
 
-    @Prop({ type: Object })
-    bet: Record<string, any>;
-
     @Prop()
     amount: number;
 

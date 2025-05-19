@@ -4,7 +4,6 @@ export interface BetEntity {
     gameUuid: string;
     type: string;
     value: string | number;
-    bet: Record<string, any>;
     amount: number;
     isWinner?: boolean;
     amountPayout?: number;

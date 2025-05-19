@@ -25,21 +25,6 @@ export class BetUseCases {
 
     public processBet = async(data: BetInputInterface) => {
         const {
-            ID_Ronda,
-            bet,
-            clientId,
-            currency,
-            identifierNumber,
-            lastBalance,
-            operatorId,
-            platform,
-            roulette,
-            round,
-            totalAmount,
-            player
-        } = data;
-
-        const {
             calleNumbers = [],
             chanceSimple = [],
             color = [],
@@ -52,7 +37,7 @@ export class BetUseCases {
             plenoNumbers = [],
             semiPlenoNumbers = [],
             specialCalle = []
-        } = bet;
+        } = data.bet;
 
         const bets: BetEntity[] = [];
 
@@ -84,9 +69,9 @@ export class BetUseCases {
                     amount,
                     value,
                     bet: { amount, [key]: value },
-                    gameUuid: roulette,
-                    playerUuid: player,
-                    roundUuid: round,
+                    gameUuid: data.roulette,
+                    playerUuid: data.player,
+                    roundUuid: data.round,
                     type
                 });
             }

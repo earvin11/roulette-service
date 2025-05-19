@@ -83,7 +83,11 @@ export class CreateRoundUseCase {
             }
         });
 
-        this.eventPublisher.emit(EventsEnum.ROUND_TO_CLOSED, { roundUuid: round.uuid, timeDelay: roulette.roundDuration }, );
+        this.eventPublisher.emit(EventsEnum.ROUND_TO_CLOSED, {
+            roundUuid: round.uuid,
+            timeDelay: roulette.roundDuration
+        });
+        
         return;
     }
 

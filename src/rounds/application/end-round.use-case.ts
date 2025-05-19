@@ -15,7 +15,7 @@ export interface IEndRound {
 }
 
 @Injectable()
-export class EndRoundUseCases {
+export class EndRoundUseCase {
     constructor(
         private readonly roundUseCases: RoundUseCases,
         private readonly rouletteUseCases: RouletteUseCases,

@@ -83,16 +83,7 @@ export class CreateRoundUseCase {
             }
         });
 
-        console.log('aqui ronda abierta')
-
-        await sleep(roulette.roundDuration);
-
-        console.log('aqui ronda cerrada')
-
-        await this.roundUseCases.updateByUuid(round.uuid!, {
-            open: false
-        });
-
+        this.eventPublisher.emit(EventsEnum.ROUND_TO_CLOSED, { roundUuid: round.uuid, timeDelay: roulette.roundDuration }, );
         return;
     }
 

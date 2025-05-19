@@ -3,4 +3,5 @@ export enum EventsEnum {
   ROUND_END = 'round.end',
   ROUND_BET_TIME = 'round.end.bet.time',
   ROUND_JACKPOT = 'round.jackpot',
+  ROUND_TO_CLOSED = 'round-to-closed'
 }

@@ -19,7 +19,7 @@ export class RoundQueueService {
   }
 
   @OnEvent(EventsEnum.ROUND_TO_CLOSED)
-  async closeRound(jobData: {roundId: string, timeDelay: number}) {
+  async closeRound(jobData: { roundId: string, timeDelay: number }) {
     return await this.roundClosedQueue.add(QueueName.ROUND_CLOSED, jobData, { delay: jobData.timeDelay * 1000 });
   }
 

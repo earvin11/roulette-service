@@ -1,0 +1,18 @@
+import { BetEntity } from '../etities/bet.entity';
+
+export abstract class BetRepository {
+    abstract create(data: BetEntity): Promise<BetEntity>;
+    abstract createMany(data: BetEntity[]): Promise<BetEntity[]>;
+    abstract findAll(page: number, limit: number): Promise<BetEntity[] | []>;
+    abstract findById(id: string): Promise<BetEntity | null>;
+    abstract findByUuid(uuid: string): Promise<BetEntity | null>;
+    abstract findOneBy(filter: Record<string, any>): Promise<BetEntity | null>;
+    abstract findManyBy(
+        filter: Record<string, any>,
+        sort?: Record<string, 1 | -1>,
+        limit?: number
+    ): Promise<BetEntity[] | []>;
+    abstract update(id: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
+    abstract updateByUuid(uuid: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
+    abstract remove(id: string): Promise<BetEntity | null>;
+}

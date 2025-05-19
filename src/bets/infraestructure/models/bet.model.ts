@@ -32,7 +32,7 @@ export class BetModel extends Document implements BetEntity {
     @Prop({ index: true, unique: true })
     uuid: string;
 
-    @Prop({ default: Date.now, expires: 30 }) // Expira en 1 hora (3600 segundos)
+    @Prop({ default: Date.now, expires: 1800 }) // Expira en 1/2 hora (3600 segundos)
     createdAt: Date;
 }
 

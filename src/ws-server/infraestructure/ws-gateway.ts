@@ -9,12 +9,15 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { BetUseCases } from 'src/bets/application/bet.use-cases';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
 
 @WebSocketGateway()
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor() {}
+  constructor(
+    private readonly betUseCases: BetUseCases
+  ) {}
 
   @WebSocketServer()
   server: Server;
@@ -24,6 +27,12 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   emitEvent(event: string, data: any) {
     this.server.emit(event, data);
+  }
+
+  //TODO: betEvent
+  @SubscribeMessage('bets')
+  async handleBet(@MessageBody() data: any) {
+    return await this.betUseCases.processBet(data);
   }
 
   @OnEvent(EventsEnum.ROUND_START)

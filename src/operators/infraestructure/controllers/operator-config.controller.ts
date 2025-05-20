@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Headers, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { OperatorConfigUseCases } from 'src/operators/application/operator-config.use-cases';
 import { CreateOperatorConfigDto } from '../dtos/create-operator-config.dto';
 import { UpdateOperatorConfigDto } from '../dtos/update-operator-config.dto';
@@ -12,6 +12,7 @@ export class OperatorConfigController {
 
     @Post(':operatorId')
     async create(
+        // @Headers('X-API-KEY') xApiKey: string
         @Param('operatorId') operatorId: string,
         @Body() createOperatorConfigDto: CreateOperatorConfigDto
     ) {
@@ -19,7 +20,10 @@ export class OperatorConfigController {
     };
 
     @Get(':operatorId')
-    async findByOperator(@Param('operatorId') operatorId: string) {
+    async findByOperator(
+        // @Headers('X-API-KEY') xApiKey: string,
+        @Param('operatorId') operatorId: string
+    ) {
         const data = await this.operatorConfigUseCases.findByOperator(operatorId);
         if(!data) throw new NotFoundException('Config by operator not found');
         return data;
@@ -27,6 +31,7 @@ export class OperatorConfigController {
 
     @Put(':operatorId')
     async updateByOperator(
+        // @Headers('X-API-KEY') xApiKey: string,
         @Param('operatorId') operatorId: string,
         @Body() updateOperatorConfigDto: UpdateOperatorConfigDto
     ) {

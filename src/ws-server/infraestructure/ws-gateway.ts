@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import {
   ConnectedSocket,
@@ -10,13 +11,20 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { BetUseCases } from 'src/bets/application/bet.use-cases';
+import { RoundCacheUseCases, RoundUseCases } from 'src/rounds/application';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
+import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
 
 @WebSocketGateway()
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+
+  private readonly logger = new Logger('WsGateway')
+
   constructor(
-    private readonly betUseCases: BetUseCases
+    private readonly betUseCases: BetUseCases,
+    private readonly roundUseCases: RoundUseCases,
+    private readonly roundCacheUseCases: RoundCacheUseCases
   ) {}
 
   @WebSocketServer()
@@ -30,8 +38,20 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   //TODO: betEvent
-  @SubscribeMessage('bets')
+  @SubscribeMessage('BET')
   async handleBet(@MessageBody() data: any) {
+
+    const round = await getEntityFromCacheOrDb(
+      () => this.roundCacheUseCases.findByUuid(data.roundUuid),
+      () => this.roundUseCases.findByUuid(data.roundUuid),
+      (roundDb) => this.roundCacheUseCases.save(roundDb)
+    );
+
+    this.logger.log({ round })
+    //TODO: validaciones de ronda
+    // if(!round) return;
+    // if(!round.open) return;
+
     return await this.betUseCases.processBet(data);
   }
 

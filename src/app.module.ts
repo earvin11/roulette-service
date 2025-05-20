@@ -10,6 +10,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
 import { OperatorModule } from './operators/infraestructure/operator.module';
 import { BetModule } from './bets/infraestructure/bet.module';
+// import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { BetModule } from './bets/infraestructure/bet.module';
         port: envs.redisPort,
       },
     }),
+    // CacheModule.register(),
     EventEmitterModule.forRoot(),
     DateServiceModule,
     RouletteModule,

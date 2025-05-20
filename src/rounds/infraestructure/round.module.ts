@@ -11,7 +11,10 @@ import { EventsModule } from 'src/events/infraestructure/events.module';
 import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { RoundQueueService } from './queues/round-queue.service';
 import { RoundClosedProcessor, RoundEndProcessor, RoundStartProcessor } from './queues/processors';
-import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundUseCases } from '../application';
+import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundCacheUseCases, RoundUseCases } from '../application';
+import { RoundCacheRepo } from './repositories/round.cache-repository';
+import { RoundCacheRepository } from '../domain/repositories/round-cache.repository';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -26,6 +29,7 @@ import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundUseCases 
       { name: QueueName.ROUND_CLOSED },
       { name: QueueName.ROUND_END }
     ),
+    CacheModule.register(),
     RouletteModule,
     DateServiceModule,
     EventsModule
@@ -33,7 +37,9 @@ import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundUseCases 
   controllers: [RoundController],
   providers: [
     RoundMongoRepository,
+    RoundCacheRepo,
     RoundUseCases,
+    RoundCacheUseCases,
     CreateRoundUseCase,
     ClosedRoundUseCase,
     EndRoundUseCase,
@@ -45,7 +51,11 @@ import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundUseCases 
       provide: RoundRepository,
       useExisting: RoundMongoRepository,
     },
+    {
+      provide: RoundCacheRepository,
+      useExisting: RoundCacheRepo
+    }
   ],
-  exports: [RoundQueueService],
+  exports: [RoundQueueService, RoundCacheUseCases, RoundUseCases],
 })
 export class RoundModule {}

@@ -8,6 +8,7 @@ import { BetController } from './controllers/bet.controller';
 import { BullModule } from '@nestjs/bullmq';
 import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { PayBetsUseCase } from '../application/pay-bets.use-case';
+import { PayBetsProcessor } from './queues/processors/pay-bets.processor';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PayBetsUseCase } from '../application/pay-bets.use-case';
     BetMongoRepository,
     BetUseCases,
     PayBetsUseCase,
+    PayBetsProcessor,
     {
       provide: BetRepository,
       useExisting: BetMongoRepository,

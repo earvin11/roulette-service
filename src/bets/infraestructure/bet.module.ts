@@ -9,6 +9,8 @@ import { BullModule } from '@nestjs/bullmq';
 import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { PayBetsUseCase } from '../application/pay-bets.use-case';
 import { PayBetsProcessor } from './queues/processors/pay-bets.processor';
+import { EventsModule } from 'src/events/infraestructure/events.module';
+import { BetQueueService } from './queues/bets-queue.service';
 
 @Module({
   imports: [
@@ -21,6 +23,7 @@ import { PayBetsProcessor } from './queues/processors/pay-bets.processor';
     BullModule.registerQueue(
       { name: QueueName.PAY_BETS }
     ),
+    EventsModule,
   ],
   controllers: [BetController],
   providers: [
@@ -28,6 +31,7 @@ import { PayBetsProcessor } from './queues/processors/pay-bets.processor';
     BetUseCases,
     PayBetsUseCase,
     PayBetsProcessor,
+    BetQueueService,
     {
       provide: BetRepository,
       useExisting: BetMongoRepository,

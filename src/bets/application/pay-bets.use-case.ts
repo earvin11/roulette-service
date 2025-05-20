@@ -4,7 +4,7 @@ import { BetRepository } from '../domain/repositories/bet.repository';
 @Injectable()
 export class PayBetsUseCase {
     constructor(
-        private readonly betRepository: BetRepository
+        private readonly betRepository: BetRepository,
     ) {};
 
     async run(roundUuid: string, result: number) {

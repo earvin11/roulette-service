@@ -11,7 +11,7 @@ export class PayBetsProcessor extends WorkerHost {
   };
 
   async process(job: any) {
-    const { roundUuid, result } = job.data;
-    return await this.payBetsUseCase.run(roundUuid, result);
+    const { round, result } = job.data;
+    return await this.payBetsUseCase.run(round, result);
   };
 };

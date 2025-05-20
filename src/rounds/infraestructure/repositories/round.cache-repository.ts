@@ -10,7 +10,7 @@ export class RoundCacheRepo implements RoundCacheRepository {
     ) {}
 
     async save(data: RoundEntity): Promise<string> {
-        const resp = await this.cacheManager.set(`round:${ data.uuid }`, JSON.stringify(data));
+        const resp = await this.cacheManager.set(`round:${ data.uuid }`, JSON.stringify(data), 300000);
         return resp;
     }
     async findByUuid(roundUuid: string): Promise<string | null> {

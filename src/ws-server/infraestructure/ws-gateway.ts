@@ -40,7 +40,6 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   //TODO: betEvent
   @SubscribeMessage('BET')
   async handleBet(@MessageBody() data: any) {
-
     const round = await getEntityFromCacheOrDb(
       () => this.roundCacheUseCases.findByUuid(data.roundUuid),
       () => this.roundUseCases.findByUuid(data.roundUuid),
@@ -49,8 +48,18 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.logger.log({ round })
     //TODO: validaciones de ronda
-    // if(!round) return;
-    // if(!round.open) return;
+    if(!round) {
+      this.server.emit('bet:err', {
+        error: 'Round not found'
+      })
+      return;
+    };
+    if(!round.open) {
+      this.server.emit('bet:err', {
+        error: 'Round closed'
+      })
+      return;
+    };
 
     return await this.betUseCases.processBet(data);
   }

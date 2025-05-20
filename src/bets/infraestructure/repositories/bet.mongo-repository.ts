@@ -38,6 +38,9 @@ export class BetMongoRepository implements BetRepository {
     updateByUuid(uuid: string, data: Partial<BetEntity>): Promise<BetEntity | null> {
         throw new Error('Method not implemented.');
     }
+    async updateMany(filter: Record<string, any>, fields: Record<string, any>): Promise<any> {
+        return await this.betModel.updateMany(filter, fields);
+    }
     remove(id: string): Promise<BetEntity | null> {
         throw new Error('Method not implemented.');
     }

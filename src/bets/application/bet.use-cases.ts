@@ -64,10 +64,10 @@ export class BetUseCases {
             for (const betItem of items) {
                 const { amount } = betItem;
                 const value = betItem[key];
-
                 bets.push({
                     amount,
-                    value,
+                    value: type === 'dozens' ? `${ value }-DOZEN` 
+                    : type === 'column' ? `${ value }-COLUMN` : value,
                     gameUuid: data.roulette,
                     playerUuid: data.player,
                     roundUuid: data.round,

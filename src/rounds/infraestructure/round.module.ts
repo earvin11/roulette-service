@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BullModule } from '@nestjs/bullmq';
 import { RoundModel, RoundSchema } from './models/round.model';
 import { RoundMongoRepository } from './repositories/round.mongo-repository';
 import { RoundRepository } from '../domain/repositories/round.repository';
-import { RouletteModule } from 'src/roulette/infraestructure/roulette.module';
 import { RoundController } from './controllers/round.controller';
 import { DateServiceModule } from 'src/date-service/infraestructure/date-service.module';
+import { RouletteModule } from 'src/roulette/infraestructure/roulette.module';
 import { EventsModule } from 'src/events/infraestructure/events.module';
+import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { RoundQueueService } from './queues/round-queue.service';
 import { RoundClosedProcessor, RoundEndProcessor, RoundStartProcessor } from './queues/processors';
-import { BullModule } from '@nestjs/bullmq';
-import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundUseCases } from '../application';
 
 @Module({

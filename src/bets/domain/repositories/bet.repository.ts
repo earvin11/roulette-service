@@ -14,5 +14,7 @@ export abstract class BetRepository {
     ): Promise<BetEntity[] | []>;
     abstract update(id: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
     abstract updateByUuid(uuid: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
+    //TODO:
+    abstract updateMany(filter: Record<string, any>, fields: Record<string, any>): Promise<any>;
     abstract remove(id: string): Promise<BetEntity | null>;
 }

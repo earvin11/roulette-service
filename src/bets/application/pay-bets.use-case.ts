@@ -33,7 +33,7 @@ export class PayBetsUseCase {
             const operatorConfigs = await this.loadOperatorConfigs(operatorUuids);
 
             // Preparar todas las actualizaciones
-            const updatePromises = betsWinner.map(async (currentBet: BetEntity) => {
+            const updateBetsWinner = betsWinner.map(async (currentBet: BetEntity) => {
                 const operatorConfig = operatorConfigs.get(currentBet.operatorUuid);
                 if (!operatorConfig) return;
 
@@ -46,7 +46,7 @@ export class PayBetsUseCase {
             });
 
             // Ejecutar todas las actualizaciones en paralelo
-            await Promise.all(updatePromises);
+            await Promise.all(updateBetsWinner);
 
             // Obtener resultados finales
             const resp = await this.betRepository.findBetsWinnerWithEarningsGroupPlayer(roundUuid);
@@ -64,6 +64,11 @@ export class PayBetsUseCase {
         const seccondColumnNumbers = new Set([2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35]);
         const thirdColumnNumbers = new Set([3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36]);
         const redNumbers = new Set([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36]);
+        const specialCalleNumbers = new Set([ 37, 0, 1, 2, 3 ]);
+        const firstCubreNumbers = new Set([0, 1 ,2]);
+        const seccondCubreNumbers = new Set([0, 2 ,3]);
+        const thirdCubreNumbers = new Set([0, 37 ,2]);
+        const fourhtCubreNumbers = new Set([37, 2 ,3]);
 
         const filterWinner: string[] = [];
 
@@ -74,6 +79,16 @@ export class PayBetsUseCase {
 
         // Verificamos color
         filterWinner.push(redNumbers.has(result) ? 'RED' : 'BLACK');
+
+        // SpecialCalle
+        if(specialCalleNumbers.has(result)) filterWinner.push('37-0-1-2-3');
+
+        // Posibles cubres
+        if(firstCubreNumbers.has(result)) filterWinner.push('0-1-2');
+        if(seccondCubreNumbers.has(result)) filterWinner.push('0-2-3');
+        if(thirdCubreNumbers.has(result)) filterWinner.push('0-37-2');
+        if(fourhtCubreNumbers.has(result)) filterWinner.push('37-2-3');
+
 
         // Verificamos rangos
         if (result > 0 && result < 19) filterWinner.push('1-18');

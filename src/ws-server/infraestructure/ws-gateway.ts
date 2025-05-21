@@ -41,8 +41,8 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('BET')
   async handleBet(@MessageBody() data: any) {
     const round = await getEntityFromCacheOrDb(
-      () => this.roundCacheUseCases.findByUuid(data.roundUuid),
-      () => this.roundUseCases.findByUuid(data.roundUuid),
+      () => this.roundCacheUseCases.findByUuid(data.round),
+      () => this.roundUseCases.findByUuid(data.round),
       (roundDb) => this.roundCacheUseCases.save(roundDb)
     );
 

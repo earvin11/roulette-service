@@ -11,6 +11,8 @@ import { PayBetsUseCase } from '../application/pay-bets.use-case';
 import { PayBetsProcessor } from './queues/processors/pay-bets.processor';
 import { EventsModule } from 'src/events/infraestructure/events.module';
 import { BetQueueService } from './queues/bets-queue.service';
+import { OperatorModule } from 'src/operators/infraestructure/operator.module';
+// import { RoundModule } from 'src/rounds/infraestructure/round.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { BetQueueService } from './queues/bets-queue.service';
       { name: QueueName.PAY_BETS }
     ),
     EventsModule,
+    OperatorModule
+    // RoundModule
   ],
   controllers: [BetController],
   providers: [

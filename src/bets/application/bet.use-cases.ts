@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BetEntity } from '../domain/etities/bet.entity';
+import { BetEntity } from '../domain/entities/bet.entity';
 import { Bet } from '../domain/implementations/bet.value';
 import { BetRepository } from '../domain/repositories/bet.repository';
 import { BetInputInterface } from 'src/shared/interfaces/bet-input.interface';
@@ -44,17 +44,17 @@ export class BetUseCases {
         // Mapeo de propiedades y tipos
         const betMappings = [
             { items: calleNumbers, type: 'calle', key: 'number' },
-            { items: chanceSimple, type: 'chance_simple', key: 'type' },
+            { items: chanceSimple, type: 'chanceSimple', key: 'type' },
             { items: color, type: 'color', key: 'type' },
             { items: columns, type: 'column', key: 'type' },
             { items: cuadroNumbers, type: 'cuadro', key: 'number' },
             { items: cubre, type: 'cubre', key: 'type' },
             { items: dozens, type: 'dozens', key: 'type' },
-            { items: even_odd, type: 'even_odd', key: 'type' },
+            { items: even_odd, type: 'evenOdd', key: 'type' },
             { items: lineaNumbers, type: 'linea', key: 'number' },
             { items: plenoNumbers, type: 'pleno', key: 'number' },
-            { items: semiPlenoNumbers, type: 'semi-pleno', key: 'number' },
-            { items: specialCalle, type: 'special_calle', key: 'type' }
+            { items: semiPlenoNumbers, type: 'semiPleno', key: 'number' },
+            { items: specialCalle, type: 'specialCalle', key: 'type' }
         ];
 
         // Generación dinámica de apuestas
@@ -71,6 +71,7 @@ export class BetUseCases {
                     gameUuid: data.roulette,
                     playerUuid: data.player,
                     roundUuid: data.round,
+                    operatorUuid: data.operatorId,
                     type
                 });
             }

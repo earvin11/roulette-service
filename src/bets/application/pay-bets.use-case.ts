@@ -1,17 +1,55 @@
-import { Injectable } from '@nestjs/common';
+ import { Injectable } from '@nestjs/common';
 import { BetRepository } from '../domain/repositories/bet.repository';
+import { RoundCacheUseCases } from 'src/rounds/application';
+import { BetEntity } from '../domain/entities/bet.entity';
+import { OperatorConfigUseCases } from 'src/operators/application/operator-config.use-cases';
 
 @Injectable()
 export class PayBetsUseCase {
     constructor(
         private readonly betRepository: BetRepository,
+        private readonly operatorConfigUseCases: OperatorConfigUseCases,
+        // private readonly roundCacheUseCases: RoundCacheUseCases
     ) {};
 
     async run(roundUuid: string, result: number) {
-    //    const bets = await this.betRepository.findManyBy({ value: result, roundUuid, amountPayout: 0 });
-        const filterWinner = this.createOptionsWinner(result);
-        console.log({ filterWinner })
-        await this.betRepository.updateMany({ value: { $in: filterWinner }, roundUuid, amountPayout: 0 }, { isWinner: true })
+        try {
+        //    const bets = await this.betRepository.findManyBy({ value: result, roundUuid, amountPayout: 0 });
+            const filterWinner = this.createOptionsWinner(result);
+            // TODO:
+            console.log({ filterWinner })
+            // await this.betRepository.updateMany({ value: { $in: filterWinner }, roundUuid, amountPayout: 0 }, { isWinner: true });
+            const betsWinner = await this.betRepository.findManyBy({ value: { $in: filterWinner }, roundUuid, amountPayout: 0 });
+            // TODO:
+            console.log({ betsWinner });
+
+            // const betToUpdate: Promise<BetEntity>[] = []
+
+            for (let i = 0; i < betsWinner.length; i++) {
+                const currentBet = betsWinner[i];
+                const operatorConfig = await this.operatorConfigUseCases.findByOperator(currentBet.operatorUuid);
+                if(!operatorConfig) continue;
+                const amountPayout = parseFloat((+operatorConfig[currentBet.type] * +currentBet.amount).toFixed(2));
+                //TODO:
+                console.log({ amountPayout, operatorPay: operatorConfig[currentBet.type], type: currentBet.type });
+
+                const data = await this.betRepository.updateByUuid(currentBet.uuid!, { amountPayout, isWinner: true });
+                // TODO:
+                console.log({ data });
+
+            }
+            // const betsWinner = await this.betRepository.findManyBy({ roundUuid, isWinner: true });
+            // await this.roundCacheUseCases.remove(roundUuid);
+
+            const resp = await this.betRepository.findBetsWinnerWithEarningsGroupPlayer(roundUuid);
+            // TODO:
+            console.log({ resp });
+            return
+        } catch (error) {
+            // TODO:
+            console.log({ error });
+            return;
+        }
     };
 
     private createOptionsWinner(result: number): string[] {

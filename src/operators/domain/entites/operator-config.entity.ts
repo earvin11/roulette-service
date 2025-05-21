@@ -3,13 +3,14 @@ export interface OperatorConfigEntity {
     order: number;
     currencies: string[];
     pleno?: number;
-    semipleno?: number;
+    semiPleno?: number;
     cuadro?: number;
     calle?: number;
     linea?: number;
-    columna?: number;
-    docena?: number;
+    column?: number;
+    dozens?: number;
     chanceSimple?: number;
+    evenOdd?: number;
     cubre?: number;
     specialCalle?: number;
     layout?: boolean;

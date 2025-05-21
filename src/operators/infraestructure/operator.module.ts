@@ -24,6 +24,6 @@ import { OperatorConfigUseCases } from '../application/operator-config.use-cases
       useExisting: OperatorConfigMongoRepository,
     },
   ],
-  exports: [],
+  exports: [OperatorConfigUseCases],
 })
 export class OperatorModule {}

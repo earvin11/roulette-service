@@ -1,10 +1,11 @@
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
-import { BetEntity } from '../etities/bet.entity';
+import { BetEntity } from '../entities/bet.entity';
 
 export class Bet implements BetEntity {
     public roundUuid: string;
     public playerUuid: string;
     public gameUuid: string;
+    public operatorUuid: string;
     public type: string;
     public amount: number;
     public value: string | number
@@ -16,6 +17,7 @@ export class Bet implements BetEntity {
         this.roundUuid = data.roundUuid;
         this.playerUuid = data.playerUuid;
         this.gameUuid = data.gameUuid;
+        this.operatorUuid = data.operatorUuid;
         this.type = data.type;
         this.amount = data.amount;
         this.value = data.value;

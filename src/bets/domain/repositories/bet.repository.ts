@@ -1,4 +1,4 @@
-import { BetEntity } from '../etities/bet.entity';
+import { BetEntity } from '../entities/bet.entity';
 
 export abstract class BetRepository {
     abstract create(data: BetEntity): Promise<BetEntity>;
@@ -12,6 +12,7 @@ export abstract class BetRepository {
         sort?: Record<string, 1 | -1>,
         limit?: number
     ): Promise<BetEntity[] | []>;
+    abstract findBetsWinnerWithEarningsGroupPlayer(roundUuid: string): Promise<BetEntity | null>;
     abstract update(id: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
     abstract updateByUuid(uuid: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
     //TODO:

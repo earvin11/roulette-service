@@ -19,6 +19,10 @@ export class ClosedRoundUseCase {
         };
 
         await this.roundCacheUseCases.remove(roundUuid);
+        await this.roundCacheUseCases.save({
+            ...round,
+            open: false
+        });
         return;
     }
 }

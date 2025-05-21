@@ -45,7 +45,7 @@ export class RoundMongoRepository implements RoundRepository {
         return await this.roundModel.findByIdAndUpdate(id, data);
     }
     async updateByUuid(uuid: string, data: Partial<RoundEntity>): Promise<RoundEntity | null> {
-        return await this.roundModel.findOneAndUpdate({ uuid }, data);
+        return await this.roundModel.findOneAndUpdate({ uuid }, data, { new: true });
     }
     async remove(id: string): Promise<RoundEntity | null> {
         throw new Error('Method not implemented.');

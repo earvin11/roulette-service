@@ -17,7 +17,7 @@ export class OperatorConfig extends Document implements OperatorConfigEntity {
     pleno: number;
 
     @Prop({ default: 18 })
-    semipleno: number;
+    semiPleno: number;
 
     @Prop({ default: 9 })
     cuadro: number;
@@ -29,13 +29,16 @@ export class OperatorConfig extends Document implements OperatorConfigEntity {
     linea: number;
 
     @Prop({ default: 3 })
-    columna: number;
+    column: number;
 
     @Prop({ default: 2 })
-    docena: number;
+    dozens: number;
 
     @Prop({ default: 2 })
     chanceSimple: number;
+
+    @Prop({ default: 2 })
+    evenOdd: number;
 
     @Prop({ default: 12 })
     cubre: number;

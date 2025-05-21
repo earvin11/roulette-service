@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { BetEntity } from 'src/bets/domain/etities/bet.entity';
+import { BetEntity } from 'src/bets/domain/entities/bet.entity';
 
 @Schema()
 export class BetModel extends Document implements BetEntity {
@@ -13,6 +13,9 @@ export class BetModel extends Document implements BetEntity {
 
     @Prop()
     gameUuid: string;
+
+    @Prop()
+    operatorUuid: string;
 
     @Prop()
     type: string;
@@ -32,7 +35,7 @@ export class BetModel extends Document implements BetEntity {
     @Prop({ index: true, unique: true })
     uuid: string;
 
-    @Prop({ default: Date.now, expires: 1800 }) // Expira en 1/2 hora (3600 segundos)
+    @Prop({ default: Date.now, expires: 90 }) // Expira en 1/2 hora (3600 segundos)
     createdAt: Date;
 }
 

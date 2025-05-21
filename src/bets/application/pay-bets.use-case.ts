@@ -38,8 +38,8 @@ export class PayBetsUseCase {
                 if (!operatorConfig) return;
 
                 const amountPayout = parseFloat((+operatorConfig[currentBet.type] * +currentBet.amount).toFixed(2));
-                console.log({ type: currentBet.type, operator: +operatorConfig[currentBet.type], amount: +currentBet.amount });
-                console.log({ amountPayout });
+                // console.log({ type: currentBet.type, operator: +operatorConfig[currentBet.type], amount: +currentBet.amount });
+                // console.log({ amountPayout });
                 
                 return this.betRepository.updateByUuid(currentBet.uuid!, { 
                     amountPayout, 

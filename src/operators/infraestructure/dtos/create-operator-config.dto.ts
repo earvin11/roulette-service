@@ -37,6 +37,14 @@ export class CreateOperatorConfigDto {
     @IsNumber()
     @IsPositive()
     @IsOptional()
+    color?: number;
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    evenOdd?: number;
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
     chanceSimple?: number;
     @IsNumber()
     @IsPositive()

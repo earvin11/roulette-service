@@ -40,6 +40,9 @@ export class OperatorConfig extends Document implements OperatorConfigEntity {
     @Prop({ default: 2 })
     evenOdd: number;
 
+    @Prop({ default: 2 })
+    color: number;
+
     @Prop({ default: 12 })
     cubre: number;
 

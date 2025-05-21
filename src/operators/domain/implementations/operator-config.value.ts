@@ -13,6 +13,7 @@ export class OperatorConfig implements OperatorConfigEntity {
     public dozens?: number;
     public chanceSimple?: number;
     public evenOdd?: number;
+    public color?: number;
     public cubre?: number;
     public specialCalle?: number;
     public layout?: boolean;
@@ -32,6 +33,7 @@ export class OperatorConfig implements OperatorConfigEntity {
         this.dozens = data.dozens;
         this.chanceSimple = data.chanceSimple;
         this.evenOdd = data.evenOdd;
+        this.color = data.color;
         this.cubre = data.cubre;
         this.specialCalle = data.specialCalle;
         this.layout = data.layout;

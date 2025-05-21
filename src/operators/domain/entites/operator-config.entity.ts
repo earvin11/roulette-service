@@ -11,6 +11,7 @@ export interface OperatorConfigEntity {
     dozens?: number;
     chanceSimple?: number;
     evenOdd?: number;
+    color?: number;
     cubre?: number;
     specialCalle?: number;
     layout?: boolean;

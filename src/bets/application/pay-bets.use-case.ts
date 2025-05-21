@@ -1,10 +1,10 @@
  import { Injectable } from '@nestjs/common';
 import { BetRepository } from '../domain/repositories/bet.repository';
 // import { RoundCacheUseCases } from 'src/rounds/application';
-// import { BetEntity } from '../domain/entities/bet.entity';
 import { OperatorConfigUseCases } from 'src/operators/application/operator-config.use-cases';
 import { OperatorConfigCacheUseCases } from 'src/operators/application/operator-config-cache.use-cases';
 import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
+import { BetEntity } from '../domain/entities/bet.entity';
 
 @Injectable()
 export class PayBetsUseCase {
@@ -17,47 +17,44 @@ export class PayBetsUseCase {
 
     async run(roundUuid: string, result: number) {
         try {
-        //    const bets = await this.betRepository.findManyBy({ value: result, roundUuid, amountPayout: 0 });
             const filterWinner = this.createOptionsWinner(result);
-            // TODO:
-            console.log({ filterWinner })
-            // await this.betRepository.updateMany({ value: { $in: filterWinner }, roundUuid, amountPayout: 0 }, { isWinner: true });
-            const betsWinner = await this.betRepository.findManyBy({ value: { $in: filterWinner }, roundUuid, amountPayout: 0 });
-            // TODO:
-            console.log({ betsWinner });
+            
+            // Obtener todas las apuestas ganadoras de una vez
+            const betsWinner = await this.betRepository.findManyBy({ 
+                value: { $in: filterWinner }, 
+                roundUuid, 
+                amountPayout: 0 
+            });
 
-            // const betToUpdate: Promise<BetEntity>[] = []
+            if (!betsWinner.length) return;
 
-            for (let i = 0; i < betsWinner.length; i++) {
-                const currentBet = betsWinner[i];
+            // Pre-cargar todas las configuraciones de operador necesarias
+            const operatorUuids = [...new Set(betsWinner.map((bet: BetEntity) => bet.operatorUuid))];
+            const operatorConfigs = await this.loadOperatorConfigs(operatorUuids);
 
-                const operatorConfig = await getEntityFromCacheOrDb(
-                    () =>  this.operatorConfigCacheUseCases.findByOperator(currentBet.operatorUuid),
-                    () => this.operatorConfigUseCases.findByOperator(currentBet.operatorUuid),
-                    (dbOp) => this.operatorConfigCacheUseCases.save(dbOp)
-                )
-                if(!operatorConfig) continue;
-                
+            // Preparar todas las actualizaciones
+            const updatePromises = betsWinner.map(async (currentBet: BetEntity) => {
+                const operatorConfig = operatorConfigs.get(currentBet.operatorUuid);
+                if (!operatorConfig) return;
+
                 const amountPayout = parseFloat((+operatorConfig[currentBet.type] * +currentBet.amount).toFixed(2));
-                //TODO:
-                console.log({ amountPayout, operatorPay: operatorConfig[currentBet.type], type: currentBet.type });
+                
+                return this.betRepository.updateByUuid(currentBet.uuid!, { 
+                    amountPayout, 
+                    isWinner: true 
+                });
+            });
 
-                const data = await this.betRepository.updateByUuid(currentBet.uuid!, { amountPayout, isWinner: true });
-                // TODO:
-                console.log({ data });
+            // Ejecutar todas las actualizaciones en paralelo
+            await Promise.all(updatePromises);
 
-            }
-            // const betsWinner = await this.betRepository.findManyBy({ roundUuid, isWinner: true });
-            // await this.roundCacheUseCases.remove(roundUuid);
-
+            // Obtener resultados finales
             const resp = await this.betRepository.findBetsWinnerWithEarningsGroupPlayer(roundUuid);
-            // TODO:
             console.log({ resp });
-            return
+            return resp;
         } catch (error) {
-            // TODO:
-            console.log({ error });
-            return;
+            console.error('Error in run function:', error);
+            throw error; // Considera propagar el error en lugar de silenciarlo
         }
     };
 
@@ -96,5 +93,20 @@ export class PayBetsUseCase {
         filterWinner.push(String(result));
 
         return filterWinner;
+    };
+
+    private async loadOperatorConfigs(operatorUuids: string[]): Promise<Map<string, any>> {
+        const configMap = new Map();
+        
+        await Promise.all(operatorUuids.map(async (uuid) => {
+            const config = await getEntityFromCacheOrDb(
+                () => this.operatorConfigCacheUseCases.findByOperator(uuid),
+                () => this.operatorConfigUseCases.findByOperator(uuid),
+                (dbOp) => this.operatorConfigCacheUseCases.save(dbOp)
+            );
+            if (config) configMap.set(uuid, config);
+        }));
+        
+        return configMap;
     };
 };

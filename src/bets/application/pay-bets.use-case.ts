@@ -1,14 +1,17 @@
  import { Injectable } from '@nestjs/common';
 import { BetRepository } from '../domain/repositories/bet.repository';
-import { RoundCacheUseCases } from 'src/rounds/application';
-import { BetEntity } from '../domain/entities/bet.entity';
+// import { RoundCacheUseCases } from 'src/rounds/application';
+// import { BetEntity } from '../domain/entities/bet.entity';
 import { OperatorConfigUseCases } from 'src/operators/application/operator-config.use-cases';
+import { OperatorConfigCacheUseCases } from 'src/operators/application/operator-config-cache.use-cases';
+import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
 
 @Injectable()
 export class PayBetsUseCase {
     constructor(
         private readonly betRepository: BetRepository,
         private readonly operatorConfigUseCases: OperatorConfigUseCases,
+        private readonly operatorConfigCacheUseCases: OperatorConfigCacheUseCases,
         // private readonly roundCacheUseCases: RoundCacheUseCases
     ) {};
 
@@ -27,8 +30,14 @@ export class PayBetsUseCase {
 
             for (let i = 0; i < betsWinner.length; i++) {
                 const currentBet = betsWinner[i];
-                const operatorConfig = await this.operatorConfigUseCases.findByOperator(currentBet.operatorUuid);
+
+                const operatorConfig = await getEntityFromCacheOrDb(
+                    () =>  this.operatorConfigCacheUseCases.findByOperator(currentBet.operatorUuid),
+                    () => this.operatorConfigUseCases.findByOperator(currentBet.operatorUuid),
+                    (dbOp) => this.operatorConfigCacheUseCases.save(dbOp)
+                )
                 if(!operatorConfig) continue;
+                
                 const amountPayout = parseFloat((+operatorConfig[currentBet.type] * +currentBet.amount).toFixed(2));
                 //TODO:
                 console.log({ amountPayout, operatorPay: operatorConfig[currentBet.type], type: currentBet.type });

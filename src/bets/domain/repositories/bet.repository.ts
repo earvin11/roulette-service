@@ -12,7 +12,7 @@ export abstract class BetRepository {
         sort?: Record<string, 1 | -1>,
         limit?: number
     ): Promise<BetEntity[] | []>;
-    abstract findBetsWinnerWithEarningsGroupPlayer(roundUuid: string): Promise<BetEntity | null>;
+    abstract findBetsWinnerWithEarningsGroupPlayer(roundUuid: string): Promise<{ _id: string, totalWinnings: number, betWinCount: number, bets: Record<string, any> }[] | []>;
     abstract update(id: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
     abstract updateByUuid(uuid: string, data: Partial<BetEntity>): Promise<BetEntity | null>;
     //TODO:

@@ -10,7 +10,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { BetUseCases } from 'src/bets/application/bet.use-cases';
+import { CreateBetsUseCase } from 'src/bets/application/create-bets.use-case';
 import { RoundCacheUseCases, RoundUseCases } from 'src/rounds/application';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
@@ -22,7 +22,7 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger('WsGateway')
 
   constructor(
-    private readonly betUseCases: BetUseCases,
+    private readonly createBetsUseCase: CreateBetsUseCase,
     private readonly roundUseCases: RoundUseCases,
     private readonly roundCacheUseCases: RoundCacheUseCases
   ) {}
@@ -61,7 +61,7 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return;
     };
 
-    return await this.betUseCases.processBet(data);
+    return await this.createBetsUseCase.processBet(data);
   }
 
   @OnEvent(EventsEnum.ROUND_START)

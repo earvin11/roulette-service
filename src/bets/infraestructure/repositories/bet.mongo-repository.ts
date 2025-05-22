@@ -32,7 +32,7 @@ export class BetMongoRepository implements BetRepository {
     async findManyBy(filter: Record<string, any>, sort?: Record<string, 1 | -1>, limit?: number): Promise<BetEntity[] | []> {
         return await this.betModel.find(filter);
     }
-    async findBetsWinnerWithEarningsGroupPlayer(roundUuid: string): Promise<any | null> {
+    async findBetsWinnerWithEarningsGroupPlayer(roundUuid: string): Promise<{ _id: string, totalWinnings: number, betWinCount: number, bets: Record<string, any> }[] | []> {
         return await this.betModel.aggregate([
             {
                 $match: {
@@ -41,10 +41,27 @@ export class BetMongoRepository implements BetRepository {
                 }
             },
             {
+                $project: {
+                    playerUuid: 1,
+                    amountPayout: 1,
+                    type: 1,
+                    value: 1,
+                    amount: 1
+                }
+            },
+            {
                 $group: {
                     _id: '$playerUuid',
                     totalWinnings: { $sum: '$amountPayout' },
-                    betCount: { $sum: 1 }
+                    betWinCount: { $sum: 1 },
+                    bets: {
+                        $push: {
+                            type: '$type',
+                            value: '$value',
+                            amount: '$amount',
+                            amountPayout: '$amountPayout'
+                        }
+                    }
                 }
             }
         ]);

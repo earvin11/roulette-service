@@ -5,6 +5,7 @@ import { OperatorConfigUseCases } from 'src/operators/application/operator-confi
 import { OperatorConfigCacheUseCases } from 'src/operators/application/operator-config-cache.use-cases';
 import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
 import { BetEntity } from '../domain/entities/bet.entity';
+import { TransactionUseCases } from 'src/transactions/application/transaction.use-cases';
 
 @Injectable()
 export class PayBetsUseCase {
@@ -12,6 +13,7 @@ export class PayBetsUseCase {
         private readonly betRepository: BetRepository,
         private readonly operatorConfigUseCases: OperatorConfigUseCases,
         private readonly operatorConfigCacheUseCases: OperatorConfigCacheUseCases,
+        private readonly transactionUseCases: TransactionUseCases,
         // private readonly roundCacheUseCases: RoundCacheUseCases
     ) {};
 
@@ -52,11 +54,20 @@ export class PayBetsUseCase {
 
             // Obtener resultados finales
             const resp = await this.betRepository.findBetsWinnerWithEarningsGroupPlayer(roundUuid);
-            console.log({ resp });
+            const createTransactions = resp.map((curr: { _id: string, totalWinnings: number, betWinCount: number, bets: Record<string, any> }) => {
+                return this.transactionUseCases.create({
+                    roundUuid,
+                    amount: curr?.totalWinnings || 0,
+                    playerUuid: curr?._id!,
+                    type: 'CREDIT',
+                    details: { ...curr, roundResult: result },
+                })
+            })
+            await Promise.all(createTransactions);
             return resp;
         } catch (error) {
             console.error('Error in run function:', error);
-            throw error; // Considera propagar el error en lugar de silenciarlo
+            throw error;
         }
     };
 

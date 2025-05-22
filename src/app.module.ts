@@ -10,6 +10,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
 import { OperatorModule } from './operators/infraestructure/operator.module';
 import { BetModule } from './bets/infraestructure/bet.module';
+import { TransactionModule } from './transactions/infraestructure/transaction.module';
 // import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
@@ -30,6 +31,7 @@ import { BetModule } from './bets/infraestructure/bet.module';
     OperatorModule,
     RoundModule,
     BetModule,
+    TransactionModule,
     WsServerModule,
   ],
   controllers: [],

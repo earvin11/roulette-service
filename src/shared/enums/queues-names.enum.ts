@@ -1,5 +1,5 @@
 export enum QueueName {
-    BETS = 'bets',
+    BET = 'bet',
     ROUND_START = 'round-start',
     ROUND_END = 'round-end',
     ROUND_CLOSED = 'round-closed',

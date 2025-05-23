@@ -8,6 +8,7 @@ import { QueueName } from 'src/shared/enums/queues-names.enum';
 @Injectable()
 export class BetQueueService {
     constructor(
+        @InjectQueue(QueueName.BET) private readonly createBetQueue: Queue,
         @InjectQueue(QueueName.PAY_BETS) private readonly payBetsQueue: Queue
     ) {}
 
@@ -15,4 +16,8 @@ export class BetQueueService {
     async payBets(jobData: { round: string, result: number }) {
         return await this.payBetsQueue.add(QueueName.PAY_BETS, jobData);
     };
+
+    async createBet(jobData: any) {
+        return await this.createBetQueue.add(QueueName.BET, jobData);
+    }
 }

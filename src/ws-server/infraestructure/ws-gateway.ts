@@ -10,7 +10,7 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { CreateBetsUseCase } from 'src/bets/application/create-bets.use-case';
+import { BetQueueService } from 'src/bets/infraestructure/queues/bets-queue.service';
 import { RoundCacheUseCases, RoundUseCases } from 'src/rounds/application';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
@@ -19,12 +19,12 @@ import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache
 @WebSocketGateway()
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
-  private readonly logger = new Logger('WsGateway')
+  // private readonly logger = new Logger('WsGateway')
 
   constructor(
-    private readonly createBetsUseCase: CreateBetsUseCase,
     private readonly roundUseCases: RoundUseCases,
-    private readonly roundCacheUseCases: RoundCacheUseCases
+    private readonly roundCacheUseCases: RoundCacheUseCases,
+    private readonly betsQueueService: BetQueueService
   ) {}
 
   @WebSocketServer()
@@ -38,7 +38,7 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   //TODO: betEvent
-  @SubscribeMessage('BET')
+  @SubscribeMessage(SocketEventsEnum.BET)
   async handleBet(@MessageBody() data: any) {
     const round = await getEntityFromCacheOrDb(
       () => this.roundCacheUseCases.findByUuid(data.round),
@@ -46,23 +46,34 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
       (roundDb) => this.roundCacheUseCases.save(roundDb)
     );
 
-    this.logger.log({ round })
-    //TODO: validaciones de ronda
+    // Validaciones de ronda
     if(!round) {
-      this.server.emit('bet:err', {
+      this.server.emit(SocketEventsEnum.BET_ERROR, {
         error: 'Round not found'
       })
       return;
     };
     if(!round.open) {
-      this.server.emit('bet:err', {
+      this.server.emit(SocketEventsEnum.BET_ERROR, {
         error: 'Round closed'
       })
       return;
     };
 
-    return await this.createBetsUseCase.processBet(data);
+    // await this.createBetsUseCase.processBet(data);
+    await this.betsQueueService.createBet(data);
+    this.server.emit(SocketEventsEnum.BET_SUCCESS, {
+      msg: 'Success',
+      // TODO: traer data de balance
+      userBalance: 1
+    });
+    return;
   }
+
+  // @SubscribeMessage(SocketEventsEnum.WINNER)
+  // winner(playerId: string, roundUuid: string) {
+
+  // }
 
   @OnEvent(EventsEnum.ROUND_START)
   startRound(payload: any) {

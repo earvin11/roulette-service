@@ -13,6 +13,7 @@ import { OperatorModule } from 'src/operators/infraestructure/operator.module';
 import { CreateBetsUseCase, PayBetsUseCase } from '../application';
 import { TransactionModule } from 'src/transactions/infraestructure/transaction.module';
 import { BetUseCases } from '../application/bet.use-cases';
+import { CreateBetProcessor } from './queues/processors/create-bet.processor';
 // import { RoundModule } from 'src/rounds/infraestructure/round.module';
 
 @Module({
@@ -24,7 +25,8 @@ import { BetUseCases } from '../application/bet.use-cases';
       },
     ]),
     BullModule.registerQueue(
-      { name: QueueName.PAY_BETS }
+      { name: QueueName.PAY_BETS },
+      { name: QueueName.BET }
     ),
     EventsModule,
     OperatorModule,
@@ -38,12 +40,13 @@ import { BetUseCases } from '../application/bet.use-cases';
     CreateBetsUseCase,
     PayBetsUseCase,
     PayBetsProcessor,
+    CreateBetProcessor,
     BetQueueService,
     {
       provide: BetRepository,
       useExisting: BetMongoRepository,
     },
   ],
-  exports: [CreateBetsUseCase],
+  exports: [CreateBetsUseCase, BetQueueService],
 })
 export class BetModule {}

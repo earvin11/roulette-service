@@ -15,23 +15,33 @@ import { RoundCacheUseCases, RoundUseCases } from 'src/rounds/application';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
 import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
-
-@WebSocketGateway()
+import { envs } from 'src/config/envs';
+@WebSocketGateway({
+  path: envs.pathWs,
+  cors: {
+    origin: '*',
+  },
+})
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
-
-  // private readonly logger = new Logger('WsGateway')
+  private readonly logger = new Logger('WsGateway');
 
   constructor(
     private readonly roundUseCases: RoundUseCases,
     private readonly roundCacheUseCases: RoundCacheUseCases,
-    private readonly betsQueueService: BetQueueService
-  ) {}
-
+    private readonly betsQueueService: BetQueueService,
+  ) {
+    this.logger.log(envs.pathWs);
+  }
+  
   @WebSocketServer()
   server: Server;
-
-  handleDisconnect(client: Socket) {}
-  handleConnection(client: Socket, ...args: any[]) {}
+  
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log('NEW CLIENT CONECTED');    
+  }
+  handleDisconnect(client: any) {
+    this.logger.log('CLIENT DISCONECTED');    
+  }
 
   emitEvent(event: string, data: any) {
     this.server.emit(event, data);
@@ -43,22 +53,22 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     const round = await getEntityFromCacheOrDb(
       () => this.roundCacheUseCases.findByUuid(data.round),
       () => this.roundUseCases.findByUuid(data.round),
-      (roundDb) => this.roundCacheUseCases.save(roundDb)
+      (roundDb) => this.roundCacheUseCases.save(roundDb),
     );
 
     // Validaciones de ronda
-    if(!round) {
+    if (!round) {
       this.server.emit(SocketEventsEnum.BET_ERROR, {
-        error: 'Round not found'
-      })
+        error: 'Round not found',
+      });
       return;
-    };
-    if(!round.open) {
+    }
+    if (!round.open) {
       this.server.emit(SocketEventsEnum.BET_ERROR, {
-        error: 'Round closed'
-      })
+        error: 'Round closed',
+      });
       return;
-    };
+    }
 
     // await this.createBetsUseCase.processBet(data);
     await this.betsQueueService.createBet(data);

@@ -9,8 +9,8 @@ export const winstonConfig: winston.LoggerOptions = {
       filename: 'logs/error.log',
       format: winston.format.combine(
         winston.format.timestamp(),
-        winston.format.printf(({ timestamp, level, message, context }) => {
-          return `${timestamp} [${level}]${context ? ` [${context}]` : ''} ${message}`;
+        winston.format.printf(({ timestamp, level, message, context, stack }) => {
+          return `${timestamp} [${level}]${context ? ` [${context}]` : ''} ${message} ${stack}`;
         }),
       ),
     }),

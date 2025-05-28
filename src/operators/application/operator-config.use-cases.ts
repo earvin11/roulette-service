@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { OperatorConfigRepository } from '../domain/repositories/operator-config.repository';
 import { OperatorConfigEntity } from '../domain/entites/operator-config.entity';
 import { OperatorConfig } from '../domain/implementations/operator-config.value';
+import { LoggerPort } from 'src/logging/domain/logger.port';
 
 @Injectable()
 export class OperatorConfigUseCases {
     constructor(
-        private readonly operatorConfigRepository: OperatorConfigRepository
+        private readonly operatorConfigRepository: OperatorConfigRepository,
+        private readonly logger: LoggerPort,
     ) {}
 
     public create = async(data: OperatorConfigEntity) => {
@@ -15,7 +17,12 @@ export class OperatorConfigUseCases {
     };
 
     public findByOperator = async(operatorId: string) => {
-        return await this.operatorConfigRepository.findByOperator(operatorId);
+        try {
+            return await this.operatorConfigRepository.findByOperator(operatorId);
+        } catch (error) {
+            this.logger.error('Fallo al obtener configuración del operador', error.stack);
+            throw error;
+        }
     };
 
     public updateByOperator = async(operatorId: string, data: Partial<OperatorConfigEntity>) => {

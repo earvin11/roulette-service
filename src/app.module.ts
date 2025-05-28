@@ -11,6 +11,7 @@ import { WsServerModule } from './ws-server/infraestructure/ws-server.module';
 import { OperatorModule } from './operators/infraestructure/operator.module';
 import { BetModule } from './bets/infraestructure/bet.module';
 import { TransactionModule } from './transactions/infraestructure/transaction.module';
+import { LogginModule } from './logging/infraestructure/logger.module';
 // import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
@@ -27,6 +28,7 @@ import { TransactionModule } from './transactions/infraestructure/transaction.mo
     // CacheModule.register(),
     EventEmitterModule.forRoot(),
     DateServiceModule,
+    LogginModule,
     RouletteModule,
     OperatorModule,
     RoundModule,

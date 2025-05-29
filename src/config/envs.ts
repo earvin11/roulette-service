@@ -7,6 +7,7 @@ interface EnvVars {
     DB_NAME: string;
     REDIS_URI: string;
     REDIS_PORT: number;
+    PATH_WS: string;
 }
 
 const evnsSchema = joi.object({
@@ -15,6 +16,7 @@ const evnsSchema = joi.object({
     DB_NAME: joi.string().required(),
     REDIS_URI: joi.string().required(),
     REDIS_PORT: joi.string().required(),
+    PATH_WS: joi.string().required()
 })
 .unknown(true);
 
@@ -32,4 +34,5 @@ export const envs = {
     dbName :envVars.DB_NAME,
     redisUri :envVars.REDIS_URI,
     redisPort :envVars.REDIS_PORT,
+    pathWs: envVars.PATH_WS
 };

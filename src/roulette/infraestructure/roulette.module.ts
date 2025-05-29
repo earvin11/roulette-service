@@ -5,6 +5,7 @@ import { RouletteMongoRepository } from './repositories/roulette.mongo-repositor
 import { RouletteRepository } from '../domain/repositories/roulette.repository';
 import { RouletteUseCases } from '../application/roulette.use-cases';
 import { RouletteController } from './controllers/roulette.controller';
+import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { RouletteController } from './controllers/roulette.controller';
         schema: RouletteSchema,
       },
     ]),
+    LoggerModule
   ],
   controllers: [RouletteController],
   providers: [

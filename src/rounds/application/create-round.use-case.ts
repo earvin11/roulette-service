@@ -5,6 +5,7 @@ import { RoundUseCases } from './round.use-cases';
 import { EventPublisher } from 'src/events/application/event-publisher';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { sleep } from 'src/shared/helpers/sleep.helper';
+import { LoggerPort } from 'src/logging/domain/logger.port';
 
  interface ICreateRound {
     ID_Ruleta: string;
@@ -21,74 +22,80 @@ export class CreateRoundUseCase {
     constructor(
         private readonly rouletteUseCases: RouletteUseCases,
         private readonly roundUseCases: RoundUseCases,
-        private readonly eventPublisher: EventPublisher
+        private readonly eventPublisher: EventPublisher,
+        private readonly loggerPort: LoggerPort
     ) {}
     async run(data: ICreateRound) {
-        const { ID_Ruleta, ID_Ronda } = data;
-
-        const roulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
-        //TODO: mejorar error de no coincidir con la ruleta
-        if(!roulette) return;
-
-        const result = Number(data.Resultado);
-        const possibleResults = [-1, 99];
-
-        //TODO:
-        // Evaluar data erronea en los results
-        if (!possibleResults.includes(result)) {
-            if (this.verifyResult(result)) {
-
+        try {
+            const { ID_Ruleta, ID_Ronda } = data;
+    
+            const roulette = await this.rouletteUseCases.findOneBy({ providerId: ID_Ruleta });
+            //TODO: mejorar error de no coincidir con la ruleta
+            if(!roulette) return;
+    
+            const result = Number(data.Resultado);
+            const possibleResults = [-1, 99];
+    
+            //TODO:
+            // Evaluar data erronea en los results
+            if (!possibleResults.includes(result)) {
+                if (this.verifyResult(result)) {
+    
+                }
             }
-        }
-
-        if(!roulette.active) {
-            await this.rouletteUseCases.updateOne(roulette.uuid!, {
-                active: true
-            });
-        }
-
-        //TODO:
-        if(roulette.isManualRoulette) {
-            //BUSCAR RONDA ACTUAL
-            const roundExists = await this.roundUseCases.findOneBy({
-                roulette: roulette.uuid,
-                result: { $in: possibleResults },
-                providerId: { $ne: '999' }, // para no tomar en cuenta rondas cerradas
-            });
-            if (roundExists)
-                return {
-                    error: true,
-                    msg: 'Round by roulette opened',
-                    ID_Ronda: roundExists.providerId,
-                };
-        }
-
-        const round = await this.roundUseCases.create({
-            identifierNumber: this.useIndentifierNumber(),
-            providerId: ID_Ronda,
-            rouletteId: roulette.uuid!,
-            rouletteName: roulette.name,
-            secondsToAdd: roulette.roundDuration
-        });
-
-        // Publicar ronda para emitir
-        this.eventPublisher.emit(EventsEnum.ROUND_START, {
-            msg: 'Round opened',
-            round: {
-                start_date: round.start_date,
-                end_date: round.end_date,
-                ID_Ronda: data.ID_Ronda,
-                identifierNumber: round.identifierNumber,
-                round: round.uuid,
+    
+            if(!roulette.active) {
+                await this.rouletteUseCases.updateOne(roulette.uuid!, {
+                    active: true
+                });
             }
-        });
-
-        this.eventPublisher.emit(EventsEnum.ROUND_TO_CLOSED, {
-            roundUuid: round.uuid,
-            timeDelay: roulette.roundDuration
-        });
-        
-        return;
+    
+            //TODO:
+            if(roulette.isManualRoulette) {
+                //BUSCAR RONDA ACTUAL
+                const roundExists = await this.roundUseCases.findOneBy({
+                    roulette: roulette.uuid,
+                    result: { $in: possibleResults },
+                    providerId: { $ne: '999' }, // para no tomar en cuenta rondas cerradas
+                });
+                if (roundExists)
+                    return {
+                        error: true,
+                        msg: 'Round by roulette opened',
+                        ID_Ronda: roundExists.providerId,
+                    };
+            }
+    
+            const round = await this.roundUseCases.create({
+                identifierNumber: this.useIndentifierNumber(),
+                providerId: ID_Ronda,
+                rouletteId: roulette.uuid!,
+                rouletteName: roulette.name,
+                secondsToAdd: roulette.roundDuration
+            });
+    
+            // Publicar ronda para emitir
+            this.eventPublisher.emit(EventsEnum.ROUND_START, {
+                msg: 'Round opened',
+                round: {
+                    start_date: round.start_date,
+                    end_date: round.end_date,
+                    ID_Ronda: data.ID_Ronda,
+                    identifierNumber: round.identifierNumber,
+                    round: round.uuid,
+                }
+            });
+    
+            this.eventPublisher.emit(EventsEnum.ROUND_TO_CLOSED, {
+                roundUuid: round.uuid,
+                timeDelay: roulette.roundDuration
+            });
+            
+            return;
+        } catch (error) {
+            this.loggerPort.error('Error in CreateRoundUseCase.run', error.stack);
+            throw error;
+        }
     }
 
     private useIndentifierNumber = () => {

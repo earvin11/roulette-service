@@ -4,6 +4,7 @@ import { TransactionModel, TransactionSchema } from './models/transaction.model'
 import { TransactionMongoRepository } from './repositories/transaction.mongo-repository';
 import { TransactionUseCases } from '../application/transaction.use-cases';
 import { TransactionRepository } from '../domain/repositories/transaction.repository';
+import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { TransactionRepository } from '../domain/repositories/transaction.reposi
         schema: TransactionSchema
       }
     ]),
+    LoggerModule
   ],
   controllers: [],
   providers: [

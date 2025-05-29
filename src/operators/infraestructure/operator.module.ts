@@ -9,9 +9,7 @@ import { OperatorConfigUseCases } from '../application/operator-config.use-cases
 import { OperatorConfigCacheRepo } from './repositories/operator-config.cache-repo';
 import { OperatorConfigCacheUseCases } from '../application/operator-config-cache.use-cases';
 import { OperatorConfigCacheRepository } from '../domain/repositories/operator-config.cache-repository';
-import { LoggerWinston } from 'src/logging/infraestructure/logger.winston';
-import { LoggerPort } from 'src/logging/domain/logger.port';
-import { LogginModule } from 'src/logging/infraestructure/logger.module';
+import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 
 @Module({
   imports: [
@@ -22,7 +20,7 @@ import { LogginModule } from 'src/logging/infraestructure/logger.module';
       },
     ]),
     CacheModule.register(),
-    LogginModule,
+    LoggerModule,
   ],
   controllers: [OperatorConfigController],
   providers: [
@@ -38,10 +36,6 @@ import { LogginModule } from 'src/logging/infraestructure/logger.module';
       provide: OperatorConfigCacheRepository,
       useExisting: OperatorConfigCacheRepo
     },
-    // {
-    //   provide: LoggerPort,
-    //   useClass: LoggerWinston,
-    // },
   ],
   exports: [OperatorConfigUseCases, OperatorConfigCacheUseCases],
 })

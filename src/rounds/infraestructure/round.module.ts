@@ -15,6 +15,7 @@ import { ClosedRoundUseCase, CreateRoundUseCase, EndRoundUseCase, RoundCacheUseC
 import { RoundCacheRepo } from './repositories/round.cache-repository';
 import { RoundCacheRepository } from '../domain/repositories/round-cache.repository';
 import { CacheModule } from '@nestjs/cache-manager';
+import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CacheModule } from '@nestjs/cache-manager';
       { name: QueueName.ROUND_END }
     ),
     CacheModule.register(),
+    LoggerModule,
     RouletteModule,
     DateServiceModule,
     EventsModule

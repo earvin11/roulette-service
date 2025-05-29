@@ -14,6 +14,7 @@ import { CreateBetsUseCase, PayBetsUseCase } from '../application';
 import { TransactionModule } from 'src/transactions/infraestructure/transaction.module';
 import { BetUseCases } from '../application/bet.use-cases';
 import { CreateBetProcessor } from './queues/processors/create-bet.processor';
+import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 // import { RoundModule } from 'src/rounds/infraestructure/round.module';
 
 @Module({
@@ -30,7 +31,8 @@ import { CreateBetProcessor } from './queues/processors/create-bet.processor';
     ),
     EventsModule,
     OperatorModule,
-    TransactionModule
+    TransactionModule,
+    LoggerModule
     // RoundModule
   ],
   controllers: [BetController],

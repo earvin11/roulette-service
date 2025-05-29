@@ -1,11 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { HttpServer, Logger, ValidationPipe } from '@nestjs/common';
+import { WinstonModule } from 'nest-winston';
 import { envs } from './config/envs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
-import { winstonConfig } from './config/winston.config';
-import { WinstonModule } from 'nest-winston';
+import { winstonConfig } from './logging/infraestructure/winston.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -26,12 +26,15 @@ async function bootstrap() {
     .setTitle('Roulette Service')
     .setDescription('')
     .setVersion('1.0')
+    .addServer(`${envs.pathWs}`)
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, documentFactory);
 
-  // app.setGlobalPrefix('api')
-  await app.listen(envs.port);
-  logger.log(`App running in port ${ envs.port }`);
+  app.setGlobalPrefix('api')
+  app.enableShutdownHooks();
+  await app.listen(envs.port, '0.0.0.0');
+  logger.log(`App running in port ${envs.port}`);
+  logger.log(`PATH_WS in ${envs.pathWs}`);
 }
 bootstrap();

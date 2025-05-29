@@ -6,6 +6,7 @@ import { OperatorConfigCacheUseCases } from 'src/operators/application/operator-
 import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
 import { BetEntity } from '../domain/entities/bet.entity';
 import { TransactionUseCases } from 'src/transactions/application/transaction.use-cases';
+import { LoggerPort } from 'src/logging/domain/logger.port';
 
 @Injectable()
 export class PayBetsUseCase {
@@ -14,6 +15,7 @@ export class PayBetsUseCase {
         private readonly operatorConfigUseCases: OperatorConfigUseCases,
         private readonly operatorConfigCacheUseCases: OperatorConfigCacheUseCases,
         private readonly transactionUseCases: TransactionUseCases,
+        private readonly loggerPort: LoggerPort
         // private readonly roundCacheUseCases: RoundCacheUseCases
     ) {};
 
@@ -66,7 +68,7 @@ export class PayBetsUseCase {
             await Promise.all(createTransactions);
             return resp;
         } catch (error) {
-            console.error('Error in run function:', error);
+            this.loggerPort.error('Error PayBetsUseCase.run function:', error.stack);
             throw error;
         }
     };

@@ -14,4 +14,4 @@ import { LoggerPort } from 'src/logging/domain/logger.port';
   ],
   exports: [LoggerPort],
 })
-export class LogginModule {}
+export class LoggerModule {}

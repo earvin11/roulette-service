@@ -10,4 +10,8 @@ export class BetUseCases {
     public findAll = async(page = 1, limit = 10) => {
         return await this.betRepository.findAll(page, limit);
     };
+
+    public findManyBy = async(filter: Record<string, any>) => {
+        return await this.betRepository.findManyBy(filter);
+    }
 }

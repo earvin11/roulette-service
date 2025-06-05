@@ -4,6 +4,7 @@ export interface RoundEntity {
     code: string;
     start_date: Date;
     end_date: Date;
+    jackpot_values?: any[];
     // jackpot_values: JackpotValues[];
     result: number;
     providerId: string;

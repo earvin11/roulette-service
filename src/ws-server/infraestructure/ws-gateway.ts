@@ -17,10 +17,10 @@ import { SocketEventsEnum } from 'src/shared/enums/socket-events.enum';
 import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache-or-db.helper';
 import { envs } from 'src/config/envs';
 @WebSocketGateway({
-  path: envs.pathWs,
-  cors: {
-    origin: '*',
-  },
+  // path: envs.pathWs,
+  // cors: {
+  //   origin: '*',
+  // },
 })
 export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger('WsGateway');

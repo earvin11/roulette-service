@@ -49,6 +49,6 @@ import { LoggerModule } from 'src/logging/infraestructure/logger.module';
       useExisting: BetMongoRepository,
     },
   ],
-  exports: [CreateBetsUseCase, BetQueueService],
+  exports: [BetUseCases, CreateBetsUseCase, BetQueueService],
 })
 export class BetModule {}

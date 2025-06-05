@@ -12,6 +12,7 @@ import { OperatorModule } from './operators/infraestructure/operator.module';
 import { BetModule } from './bets/infraestructure/bet.module';
 import { TransactionModule } from './transactions/infraestructure/transaction.module';
 import { LoggerModule } from './logging/infraestructure/logger.module';
+import { JackpotModule } from './jackpot/infraestructure/jackpot.module';
 // import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
@@ -34,6 +35,7 @@ import { LoggerModule } from './logging/infraestructure/logger.module';
     RoundModule,
     BetModule,
     TransactionModule,
+    JackpotModule,
     WsServerModule,
   ],
   controllers: [],

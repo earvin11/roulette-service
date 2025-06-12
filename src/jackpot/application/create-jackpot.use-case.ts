@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { BetUseCases } from 'src/bets/application/bet.use-cases';
 import { RoundUseCases } from 'src/rounds/application';
-import { IRouletteConfig } from './interfaces/IRouletteConfig';
 import { LoggerPort } from 'src/logging/domain/logger.port';
 import { Jackpot } from './Jackpot';
+import { IConfigJackpot } from './interfaces/IConfigJackpot';
+import { EventPublisher } from 'src/events/application/event-publisher';
+import { EventsEnum } from 'src/shared/enums/events.enum';
 
 @Injectable()
 export class CreateJackpoUseCase {
 
-    private config: IRouletteConfig = {
-        // multiplicadores de premio (base)
-        betMultipliers: {
+    private config: IConfigJackpot = {
+        virtualBank_min: 150,
+        virtualBank_max: 500,
+        virtualBank_part: 18,
+        collectionOfMultipliers: [50, 100, 150, 200, 300, 500, 1000],
+        sizeJackpots: 5,
+        betPrizeMoney: {
             straightUp: 32,
             split: 18,
             street: 12,
@@ -22,16 +28,13 @@ export class CreateJackpoUseCase {
             evenOdd: 1,
             lowHigh: 1,
             basket: 7
-        },
-        jackpotsCollection: [50, 100, 150, 200, 300, 500, 1000],
-        riskThreshold: 0.1,
-        enableStrongBlock: true,
-        strongBlock: 0.95,
+    }
     }
 
     constructor(
         private readonly betUseCases: BetUseCases,
         private readonly roundUseCases: RoundUseCases,
+        private readonly eventPublisher: EventPublisher,
         private readonly loggerPort: LoggerPort
     ) {}
 
@@ -44,11 +47,6 @@ export class CreateJackpoUseCase {
             };
 
             const bets = await this.betUseCases.findManyBy({ roundUuid });
-            if(!bets.length) {
-                //TODO:
-                this.loggerPort.error(`Round not has bets`, roundUuid);
-                return;
-            };
 
             const jackpot = new Jackpot(this.config);
 
@@ -116,9 +114,12 @@ export class CreateJackpoUseCase {
                 }
             };
 
-            const { jackpots } =  jackpot.resolve(300);
+            const resolve =  jackpot.resolve(300);
+            const jackpots = resolve.result;
             await this.roundUseCases.updateByUuid(roundUuid, { jackpot_values: jackpots });
-            console.log({ jackpots });
+            // TODO:
+            this.eventPublisher.emit(EventsEnum.ROUND_JACKPOT, jackpots);
+            console.log({ resolve });
             return jackpot;
             
         } catch (error) {

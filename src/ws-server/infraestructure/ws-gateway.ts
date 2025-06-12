@@ -96,29 +96,29 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   betSuccess(payload: any) {
     this.server.emit(SocketEventsEnum.BET_SUCCESS, JSON.stringify(payload));
     return;
-  }
+  };
 
   @OnEvent(EventsEnum.ROUND_START)
   startRound(payload: any) {
     this.server.emit(SocketEventsEnum.ROUND_START, JSON.stringify(payload));
     return;
-  }
+  };
 
   @OnEvent(EventsEnum.ROUND_END)
   endRound(payload: any) {
     this.server.emit(SocketEventsEnum.ROUND_END, JSON.stringify(payload));
     return;
-  }
+  };
+
+  @OnEvent(EventsEnum.ROUND_JACKPOT)
+  jackpot(payload: any) {
+    this.server.emit(SocketEventsEnum.ROUND_JACKPOT, JSON.stringify(payload));
+    return;
+  };
 
   // @OnEvent(EventsEnum.ROUND_BET_TIME)
   // endBetTimeRound(payload: any) {
   //   this.server.emit(SocketEventsEnum.ROUND_BET_TIME, JSON.stringify(payload));
-  //   return;
-  // }
-
-  // @OnEvent(EventsEnum.ROUND_JACKPOT)
-  // endJackpotRound(payload: any) {
-  //   this.server.emit(SocketEventsEnum.ROUND_JACKPOT, JSON.stringify(payload));
   //   return;
   // }
 }

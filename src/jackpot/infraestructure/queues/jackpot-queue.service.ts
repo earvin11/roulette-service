@@ -13,7 +13,6 @@ export class JackpotQueueService {
 
     @OnEvent(EventsEnum.ROUND_JACKPOT)
     async generateJackpot(jobData: any) {
-        console.log({ jobData })
         return await this.calculateJackpot.add(QueueName.CALCULATE_JACKPOT, jobData);
     };
 };

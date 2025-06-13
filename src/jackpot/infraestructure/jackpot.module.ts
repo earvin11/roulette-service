@@ -7,6 +7,7 @@ import { QueueName } from 'src/shared/enums/queues-names.enum';
 import { GenerateJackpotProcessor } from './queues/processors/generate-jackpot.processor';
 import { JackpotQueueService } from './queues/jackpot-queue.service';
 import { CreateJackpoUseCase } from '../application/create-jackpot.use-case';
+import { EventsModule } from 'src/events/infraestructure/events.module';
 
 @Module({
     imports: [
@@ -15,6 +16,7 @@ import { CreateJackpoUseCase } from '../application/create-jackpot.use-case';
         ),
         RoundModule,
         BetModule,
+        EventsModule,
         LoggerModule,
     ],
     providers: [

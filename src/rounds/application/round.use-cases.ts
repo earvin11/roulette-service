@@ -66,6 +66,7 @@ export class RoundUseCases {
     };
 
     public findByUuid = async(uuid: string) => {
+        this.loggerPort.log(uuid);
         try {
             return await this.roundRepository.findByUuid(uuid);
         } catch (error) {

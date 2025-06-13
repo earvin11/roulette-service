@@ -6,5 +6,6 @@ export enum EventsEnum {
   ROUND_TO_CLOSED = 'round-to-closed',
 
   BET_SUCCESS = 'bet:success',
-  BET_ERROR = 'bet:error'
+  BET_ERROR = 'bet:error',
+  EMIT_JACKPOT = 'jackpot-values',
 }

@@ -110,9 +110,9 @@ export class WsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     return;
   };
 
-  @OnEvent(EventsEnum.ROUND_JACKPOT)
+  @OnEvent(EventsEnum.EMIT_JACKPOT)
   jackpot(payload: any) {
-    this.server.emit(SocketEventsEnum.ROUND_JACKPOT, JSON.stringify(payload));
+    this.server.emit(SocketEventsEnum.ROUND_JACKPOT_VALUES, JSON.stringify(payload));
     return;
   };
 

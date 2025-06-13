@@ -117,11 +117,9 @@ export class CreateJackpoUseCase {
             const resolve =  jackpot.resolve(300);
             const jackpots = resolve.result;
             await this.roundUseCases.updateByUuid(roundUuid, { jackpot_values: jackpots });
-            // TODO:
-            this.eventPublisher.emit(EventsEnum.ROUND_JACKPOT, jackpots);
-            console.log({ resolve });
+
+            this.eventPublisher.emit(EventsEnum.EMIT_JACKPOT, jackpots);
             return jackpot;
-            
         } catch (error) {
             this.loggerPort.error(`Error metodo CreateJackpoUseCase.run`, error.stack);
             throw error;

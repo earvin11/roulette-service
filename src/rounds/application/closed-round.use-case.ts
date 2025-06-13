@@ -37,9 +37,6 @@ export class ClosedRoundUseCase {
 
 
             this.eventPublisher.emit(EventsEnum.ROUND_JACKPOT, roundUuid);
-
-            console.log('aqui');
-
             return;
         } catch (error) {
             this.loggerPort.error('Error in ClosedRoundUseCase.run', error.stack)

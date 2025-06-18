@@ -13,6 +13,7 @@ import { BetModule } from './bets/infraestructure/bet.module';
 import { TransactionModule } from './transactions/infraestructure/transaction.module';
 import { LoggerModule } from './logging/infraestructure/logger.module';
 import { JackpotModule } from './jackpot/infraestructure/jackpot.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 // import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
@@ -27,6 +28,19 @@ import { JackpotModule } from './jackpot/infraestructure/jackpot.module';
       },
     }),
     // CacheModule.register(),
+    ClientsModule.register([
+      {
+        name: 'PLAYER_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: [envs.rabbitMqUrl],
+          queue: 'player_queue',
+          queueOptions: {
+            durable: false
+          }
+        }
+      }
+    ]),
     EventEmitterModule.forRoot(),
     DateServiceModule,
     LoggerModule,

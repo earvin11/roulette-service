@@ -1,6 +1,6 @@
 export interface BetInputInterface {
     player:           string;
-    userId:           string;
+    user_id:          string;
     operatorId:       string;
     clientId:         string;
     roulette:         string;

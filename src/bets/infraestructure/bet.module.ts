@@ -15,6 +15,7 @@ import { TransactionModule } from 'src/transactions/infraestructure/transaction.
 import { BetUseCases } from '../application/bet.use-cases';
 import { CreateBetProcessor } from './queues/processors/create-bet.processor';
 import { LoggerModule } from 'src/logging/infraestructure/logger.module';
+import { CommunicationMSModule } from 'src/comunication-ms/infraestrcture/communication-ms.module';
 // import { RoundModule } from 'src/rounds/infraestructure/round.module';
 
 @Module({
@@ -32,7 +33,8 @@ import { LoggerModule } from 'src/logging/infraestructure/logger.module';
     EventsModule,
     OperatorModule,
     TransactionModule,
-    LoggerModule
+    LoggerModule,
+    CommunicationMSModule,
     // RoundModule
   ],
   controllers: [BetController],

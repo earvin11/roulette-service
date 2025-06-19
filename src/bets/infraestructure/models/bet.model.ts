@@ -26,6 +26,9 @@ export class BetModel extends Document implements BetEntity {
     @Prop()
     amount: number;
 
+    @Prop()
+    betReference: string;
+
     @Prop({ default: false })
     isWinner: boolean;
 

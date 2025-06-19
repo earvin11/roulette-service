@@ -65,6 +65,7 @@ export class PayBetsUseCase {
                     playerUuid: curr?._id!,
                     type: 'CREDIT',
                     details: { ...curr, roundResult: result },
+                    betReference: resp[0].bets.betReference,
                 })
             })
             await Promise.all(createTransactions);
@@ -141,6 +142,6 @@ export class PayBetsUseCase {
         return configMap;
     };
     private async pay() {
-        
+
     };
 };

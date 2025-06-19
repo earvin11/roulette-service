@@ -20,10 +20,10 @@ export interface DebitWalletRequest {
   bet_id: string;
   game_id: string;
   bet_code: string;
-  bet_date: string;
+  bet_date: Date;
   platform: string;
   currency: string;
-  transactionType: 'debit';
+  transactionType: 'bet';
   allow_multiple_transactions?: boolean;
 }
 

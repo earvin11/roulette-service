@@ -6,6 +6,7 @@ export class Transaction implements TransactionEntity {
     public roundUuid: string;
     public playerUuid: string;
     public amount: number;
+    public betReference: string;
     public uuid: string;
     public details?: Record<string, any>;
 
@@ -14,6 +15,7 @@ export class Transaction implements TransactionEntity {
         this.details = data.details;
         this.playerUuid = data.playerUuid;
         this.roundUuid = data.roundUuid;
+        this.betReference = data.betReference;
         this.type = data.type;
         this.uuid = generateUuid();
     };

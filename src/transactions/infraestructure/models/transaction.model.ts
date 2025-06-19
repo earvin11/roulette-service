@@ -17,6 +17,9 @@ export class TransactionModel extends Document implements TransactionEntity {
     @Prop()
     amount: number;
 
+    @Prop()
+    betReference: string;
+
     @Prop({ type: Object })
     details?: Record<string, any>;
 

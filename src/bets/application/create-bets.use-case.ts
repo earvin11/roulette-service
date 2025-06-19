@@ -9,6 +9,7 @@ import { LoggerPort } from 'src/logging/domain/logger.port';
 import { EventPublisher } from 'src/events/application/event-publisher';
 import { EventsEnum } from 'src/shared/enums/events.enum';
 import { CommunicationWalletUseCases } from 'src/comunication-ms/application/communication-wallet.use-cases';
+import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 
 @Injectable()
 export class CreateBetsUseCase {
@@ -60,6 +61,7 @@ export class CreateBetsUseCase {
                 specialCalle = []
             } = data.bet;
     
+            const betReference = generateUuid();
             const bets: BetEntity[] = [];
     
             // Mapeo de propiedades y tipos
@@ -93,35 +95,37 @@ export class CreateBetsUseCase {
                         playerUuid: data.player,
                         roundUuid: data.round,
                         operatorUuid: data.operatorId,
-                        type
+                        type,
+                        betReference
                     });
                 }
             }
             
             const totalAmount = this.calculateTotalAmount(data.bet);
 
-            const [_, transaction] = await Promise.all([
-                this.createMany(bets),
-                this.transactionUseCases.create({
+            // Registra las apuestas en DB
+            await this.createMany(bets),
+            // Envia el debito a wallet
+            await this.communicationWalletUseCases.debit(data.operatorId, {
+                amount: totalAmount,
+                bet_code: betReference,
+                bet_date: new Date(),
+                bet_id: betReference,
+                currency: data.currency,
+                game_id: data.roulette,
+                round_id: data.round,
+                transactionType: 'bet',
+                platform: 'platform',
+                user_id: data.user_id,
+            });
+            // Si todo sale bien crea la transaction
+            await this.transactionUseCases.create({
                     roundUuid: data.round,
                     amount: totalAmount,
                     playerUuid: data.player,
                     type: 'DEBIT',
-                    details: data.bet
-                })
-            ]);
-
-            await this.communicationWalletUseCases.debit(data.operatorId, {
-                amount: totalAmount,
-                bet_code: '1',
-                bet_date: new Date().getDate().toString(),
-                bet_id: transaction.uuid!,
-                currency: data.currency,
-                game_id: data.roulette,
-                round_id: data.round,
-                transactionType: 'debit',
-                platform: 'platform',
-                user_id: data.user_id,
+                    details: data.bet,
+                    betReference
             });
 
             this.eventPublisher.emit(EventsEnum.BET_SUCCESS, { msg: 'Success' });

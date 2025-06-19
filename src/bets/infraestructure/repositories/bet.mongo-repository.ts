@@ -46,7 +46,8 @@ export class BetMongoRepository implements BetRepository {
                     amountPayout: 1,
                     type: 1,
                     value: 1,
-                    amount: 1
+                    amount: 1,
+                    betReference: 1
                 }
             },
             {
@@ -59,7 +60,8 @@ export class BetMongoRepository implements BetRepository {
                             type: '$type',
                             value: '$value',
                             amount: '$amount',
-                            amountPayout: '$amountPayout'
+                            amountPayout: '$amountPayout',
+                            betReference: '$betReference',
                         }
                     }
                 }

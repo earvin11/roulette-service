@@ -6,7 +6,6 @@ import { QueueNamesMS } from '../domain/enums/name-queues.enum';
 import { CommunicationWalletPort } from '../domain/ports/communication-wallet.port';
 import { CommunicationWalletRMQ } from './adapters/communication-wallet.rmq';
 import { CommunicationWalletUseCases } from '../application/communication-wallet.use-cases';
-import { LoggerModule } from 'src/logging/infraestructure/logger.module';
 
 @Module({
     imports: [

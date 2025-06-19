@@ -3,6 +3,7 @@ export interface TransactionEntity {
     roundUuid: string;
     playerUuid: string;
     amount: number;
+    betReference: string;
     uuid?: string;
     details?: Record<string, any>;
 }

@@ -8,7 +8,7 @@ import { TransactionUseCases } from 'src/transactions/application/transaction.us
 import { LoggerPort } from 'src/logging/domain/logger.port';
 import { EventPublisher } from 'src/events/application/event-publisher';
 import { EventsEnum } from 'src/shared/enums/events.enum';
-import { CommunicationWalletUseCases } from 'src/comunication-ms/application/communication-wallet.use-cases';
+// import { CommunicationWalletUseCases } from 'src/comunication-ms/application/communication-wallet.use-cases';
 import { generateUuid } from 'src/shared/helpers/generate-uuid.helper';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class CreateBetsUseCase {
         private readonly betRepository: BetRepository,
         private readonly transactionUseCases: TransactionUseCases,
         private readonly eventPublisher: EventPublisher,
-        private readonly communicationWalletUseCases: CommunicationWalletUseCases,
+        // private readonly communicationWalletUseCases: CommunicationWalletUseCases,
         private readonly loggerPort: LoggerPort
     ) {};
 
@@ -106,18 +106,18 @@ export class CreateBetsUseCase {
             // Registra las apuestas en DB
             await this.createMany(bets),
             // Envia el debito a wallet
-            await this.communicationWalletUseCases.debit(data.operatorId, {
-                amount: totalAmount,
-                bet_code: betReference,
-                bet_date: new Date(),
-                bet_id: betReference,
-                currency: data.currency,
-                game_id: data.roulette,
-                round_id: data.round,
-                transactionType: 'bet',
-                platform: 'platform',
-                user_id: data.user_id,
-            });
+            // await this.communicationWalletUseCases.debit(data.operatorId, {
+            //     amount: totalAmount,
+            //     bet_code: betReference,
+            //     bet_date: new Date(),
+            //     bet_id: betReference,
+            //     currency: data.currency,
+            //     game_id: data.roulette,
+            //     round_id: data.round,
+            //     transactionType: 'bet',
+            //     platform: 'platform',
+            //     user_id: data.user_id,
+            // });
             // Si todo sale bien crea la transaction
             await this.transactionUseCases.create({
                     roundUuid: data.round,

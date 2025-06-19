@@ -7,7 +7,7 @@ import { getEntityFromCacheOrDb } from 'src/shared/helpers/get-entity-from-cache
 import { BetEntity } from '../domain/entities/bet.entity';
 import { TransactionUseCases } from 'src/transactions/application/transaction.use-cases';
 import { LoggerPort } from 'src/logging/domain/logger.port';
-import { CommunicationWalletUseCases } from 'src/comunication-ms/application/communication-wallet.use-cases';
+// import { CommunicationWalletUseCases } from 'src/comunication-ms/application/communication-wallet.use-cases';
 
 @Injectable()
 export class PayBetsUseCase {
@@ -16,7 +16,7 @@ export class PayBetsUseCase {
         private readonly operatorConfigUseCases: OperatorConfigUseCases,
         private readonly operatorConfigCacheUseCases: OperatorConfigCacheUseCases,
         private readonly transactionUseCases: TransactionUseCases,
-        private readonly communicationWalletUseCases: CommunicationWalletUseCases,
+        // private readonly communicationWalletUseCases: CommunicationWalletUseCases,
         private readonly loggerPort: LoggerPort
         // private readonly roundCacheUseCases: RoundCacheUseCases
     ) {};
@@ -55,7 +55,6 @@ export class PayBetsUseCase {
 
             // Ejecutar todas las actualizaciones en paralelo
             await Promise.all(updateBetsWinner);
-
             // Obtener resultados finales
             const resp = await this.betRepository.findBetsWinnerWithEarningsGroupPlayer(roundUuid);
             const createTransactions = resp.map((curr: { _id: string, totalWinnings: number, betWinCount: number, bets: Record<string, any> }) => {
@@ -140,8 +139,5 @@ export class PayBetsUseCase {
         }));
         
         return configMap;
-    };
-    private async pay() {
-
     };
 };

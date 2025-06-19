@@ -6,7 +6,7 @@ import { envs } from './config/envs';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 import { winstonConfig } from './logging/infraestructure/winston.config';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+// import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -24,17 +24,16 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter()); // Filtro de errores
 
   // Conexión a RabbitMQ
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'player_queue',
-      queueOptions: {
-        durable: false
-
-      },
-    },
-  });
+  // app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.RMQ,
+  //   options: {
+  //     urls: [envs.rabbitMqUrl],
+  //     queue: 'player_queue',
+  //     queueOptions: {
+  //       durable: false
+  //     },
+  //   },
+  // });
 
   const config = new DocumentBuilder()
     .setTitle('Roulette Service')
@@ -48,7 +47,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api')
   app.enableShutdownHooks();
 
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
   await app.listen(envs.port, '0.0.0.0');
 
   logger.log(`App running in port ${envs.port}`);
